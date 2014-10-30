@@ -1,12 +1,14 @@
 #include "qtypes.h"
 #include "qslist.h"
 
+#define _qslist_alloc()     qalloc(QSList, 1)
+
 QSList*
 q_slist_prepend (QSList *list, qpointer data)
 {
   QSList *new_list;
 
-  new_list = qalloc (GSList, 1);
+  new_list = _qslist_alloc();
   new_list->next = list;
   new_list->data = data;
   return new_list;
