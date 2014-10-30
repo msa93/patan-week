@@ -1,3 +1,4 @@
+#include "qlib.h"
 #include "qtypes.h"
 #include "qslist.h"
 
@@ -17,7 +18,15 @@ q_slist_prepend (QSList *list, qpointer data)
 qboolean
 q_slist_is_empty (QSList *list)
 {
-  return QSList == NULL;
+  return !list;
+}
+
+gpointer
+q_slist_find_compare (QSList *list, gpointer data, QEqualFunc func)
+{
+  QSList *l;
+  for (l = list; l && func(data, l->data); l = l->next);
+  return l;
 }
 
 
@@ -32,7 +41,7 @@ q_slist_is_empty (QSList *list)
 QSList*
 q_slist_free (QSList *list)
 {
-  QSList *l;
+  QSList *l, *cur;
 
   l = list;
   while (l) {

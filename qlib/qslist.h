@@ -12,6 +12,7 @@ struct _QSList {
 
 QSList*     q_slist_prepend (QSList *list, qpointer data);
 qboolean    q_slist_is_empty (QSList *list);
+GSList*     q_list_find (GSList *list, gpointer data);
 QSList*     q_list_free (QSList *list);
 
 #endif /* __Q_SLIST_H__ */
