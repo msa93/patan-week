@@ -50,6 +50,12 @@
  *       <fiestas> [lista de ALUMNOS inscritos en la fiesta]
  *     }
  *
+ * TODO
+ * Lo ideal seria tener de alguna manera todo relacionado. Pero puede que ya sea
+ * demasiado ambicioso. Por ejemplo, relacionar especialidades con alumnos, para
+ * obtener desde la misma ESPECIALIDAD == Ingenieria Informatica, por ejemplo,
+ * todos los alumnos que estudian en Ingenieria Informatica y fueron a la FIESTA
+ * == Fiesta de Cachimbos 2012.
 */
 
 
