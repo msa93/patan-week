@@ -435,3 +435,73 @@ patan_parse_asistencia (const char * filename, QHashTable *fiestas,
 
   fclose (f);
 }
+
+
+/***************************************************************************/
+
+/* ESPECIALIDADES */
+
+QHashTable *
+patan_especialidades_new ()
+{
+  return q_hash_table_new (qfunc_hash_numeric_string,
+      func_hash_key_strings_equal);
+}
+
+void
+patan_especialidades_insert (QHashTable * hash_table, const char * id,
+    const char * especialidad)
+{
+  q_hash_table_insert (hash_table, strdup (id), strdup (especialidad));
+}
+
+
+/* ALUMNOS */
+
+QHashTable *
+patan_alumnos_new ()
+{
+  return q_hash_table_new (qfunc_hash_numeric_string,
+      func_hash_key_strings_equal);
+}
+
+void
+patan_alumnos_insert (QHashTable * hash_table, const char * id,
+    const char * nombre, QDate date, QHashKeyValue *fiesta_kv)
+{
+  q_hash_table_insert (hash_table, strdup (id),
+      alumno_value_new (strdup (nombre), &date, fiesta_kv));
+}
+
+/* FIESTAS (Oscar) */
+
+QHashTable *
+patan_fiestas_new ()
+{
+  return q_hash_table_new (qfunc_hash_numeric_string,
+      func_hash_key_strings_equal);
+}
+
+void
+patan_fiestas_insert (QHashTable * hash_table, const char * id,
+    const char * nombre, int precio, QDate date)
+{
+  q_hash_table_insert (hash_table, strdup (id),
+      fiesta_value_new (strdup (nombre), precio, &date));
+}
+
+
+/* Utilidades */
+void
+patan_registrar_asistencia (QHashKeyValue * alumno_kv,
+    QHashKeyValue * fiesta_kv)
+{
+    FiestaValue *fiesta_val;
+    AlumnoValue *alumno_val;
+    alumno_val = ALUMNO_VALUE (alumno_kv->value);
+    fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+
+    fiesta_val->alumnos = q_slist_prepend (fiesta_val->alumnos, alumno_kv);
+    alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
+}
+

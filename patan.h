@@ -58,6 +58,8 @@
  * == Fiesta de Cachimbos 2012.
 */
 
+typedef struct _AlumnoValue AlumnoValue;
+typedef struct _FiestaValue FiestaValue;
 
 struct _AlumnoValue {
   char *nombre;
@@ -68,7 +70,7 @@ struct _AlumnoValue {
   QSList *fiestas; 
 };
 
-typedef struct _AlumnoValue AlumnoValue;
+
 
 struct _FiestaValue {
   char *nombre;
@@ -78,7 +80,22 @@ struct _FiestaValue {
   QSList *alumnos;
 };
 
-typedef struct _FiestaValue FiestaValue;
+
+QHashTable*     patan_especialidades_new        ();
+void            patan_especialidades_insert     (QHashTable * hash_table,
+                                                const char * id,
+                                                const char * especialidad);
+QHashTable*     patan_alumnos_new     ();
+void            patan_alumnos_insert  (QHashTable * hash_table, const char * id,
+                                      const char * nombre, QDate date,
+                                      QHashKeyValue *especialidad_kv);
+QHashTable*     patan_fiestas_new     ();
+void            patan_fiestas_insert  (QHashTable * hash_table, const char * id,
+                                      const char * nombre, int precio,
+                                      QDate date);
+void            patan_registrar_asistencia      (QHashKeyValue * alumno_kv,
+                                                QHashKeyValue * fiesta_kv);
+
 
 #define ALUMNO_VALUE(t)       ((AlumnoValue *) t)
 #define FIESTA_VALUE(t)       ((FiestaValue *) t)

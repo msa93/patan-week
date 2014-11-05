@@ -70,4 +70,22 @@ q_hash_table_get_key_value_by_key (QHashTable * hash_table, qpointer key)
   return list ? Q_HASH_KEY_VALUE (list->data) : NULL;
 }
 
+QSList *
+q_hash_table_get_key_values (QHashTable * hash_table)
+{
+  QSList *l;
+  int i;
+
+  l = NULL;
+  for (i = 0; i < hash_table->size; i++) {
+    QSList *iter;
+    iter = hash_table->table[i];
+    while (iter) {
+      l = q_slist_prepend (l, iter->data);
+      iter = iter->next;
+    }
+  }
+
+  return l;
+}
 

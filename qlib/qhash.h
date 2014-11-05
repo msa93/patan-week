@@ -32,5 +32,6 @@ void            q_hash_table_insert             (QHashTable * hash_table, qpoint
 QHashKeyValue*  q_hash_table_get_key_value_by_key   (QHashTable * hash_table, 
                                                  qpointer key);
 QSList *        q_hash_table_lookup (QHashTable * hash_table, qpointer key);
+QSList*         q_hash_table_get_key_values (QHashTable * hash_table);
 
 #endif /* __Q_HASH_H__ */

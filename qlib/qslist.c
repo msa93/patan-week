@@ -51,6 +51,25 @@ q_slist_find_compare (QSList * list, gpointer data, QEqualFunc func)
   return l;
 }
 
+static QSList *
+q_list_sorted_merge (QSList * l1, QSList * l2, QCompareFunc cmp_func)
+{
+  QSList *ret;
+  if (!l1)
+    return l2;
+  if (!l2)
+    return l1;
+
+  if (cmp_func (l1->data, l2->data) >= 0) {
+    ret = l2;
+    ret->next = q_list_sorted_merge (l1, l2->next, cmp_func);
+  } else {
+    ret = l1;
+    ret->next = q_list_sorted_merge (l1->next, l2, cmp_func);
+  }
+
+  return ret;  
+}
 
 /**
  * q_slist_free:
