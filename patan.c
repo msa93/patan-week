@@ -455,6 +455,13 @@ patan_especialidades_insert (QHashTable * hash_table, const char * id,
   q_hash_table_insert (hash_table, strdup (id), strdup (especialidad));
 }
 
+int
+patan_especialidades_cmp_by_especialidad (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  return strcmp (kv1->value, kv2->value);
+}
+
 
 /* ALUMNOS */
 

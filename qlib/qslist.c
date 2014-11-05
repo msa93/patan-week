@@ -52,7 +52,7 @@ q_slist_find_compare (QSList * list, gpointer data, QEqualFunc func)
 }
 
 static QSList *
-q_list_sorted_merge (QSList * l1, QSList * l2, QCompareFunc cmp_func)
+q_slist_sorted_merge (QSList * l1, QSList * l2, QCompareFunc cmp_func)
 {
   QSList *ret;
   if (!l1)
@@ -62,13 +62,58 @@ q_list_sorted_merge (QSList * l1, QSList * l2, QCompareFunc cmp_func)
 
   if (cmp_func (l1->data, l2->data) >= 0) {
     ret = l2;
-    ret->next = q_list_sorted_merge (l1, l2->next, cmp_func);
+    ret->next = q_slist_sorted_merge (l1, l2->next, cmp_func);
   } else {
     ret = l1;
-    ret->next = q_list_sorted_merge (l1->next, l2, cmp_func);
+    ret->next = q_slist_sorted_merge (l1->next, l2, cmp_func);
   }
 
   return ret;  
+}
+
+static void
+q_slist_split_in_two (QSList * list, QSList ** left, QSList ** right)
+{
+  QSList *slow, *fast;
+
+  if (!list || !(list->next)) {
+    *left = list;
+    *right = NULL;
+    return;
+  }
+
+  slow = list;
+  fast = list->next;
+
+  while (fast) {
+    fast = fast->next;
+    if (fast) {
+      slow = slow->next;
+      fast = fast->next;
+    }
+  }
+
+  *right = slow->next;
+  slow->next = NULL;
+  *left = list;
+}
+
+
+QSList *
+q_slist_sort (QSList * list, QCompareFunc cmp_func)
+{
+  QSList *left, *right;
+  QSList *l, *r;
+
+  if (!list || !(list->next)) {
+    return list;
+  }
+  q_slist_split_in_two (list, &left, &right);
+
+  l = q_slist_sort (left, cmp_func);
+  r = q_slist_sort (right, cmp_func);
+
+  return q_slist_sorted_merge (l, r, cmp_func);
 }
 
 /**

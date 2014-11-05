@@ -23,7 +23,28 @@ create_and_fill_model (QHashTable * especialidades)
                                  G_TYPE_STRING);
  
   especialidades_list = q_hash_table_get_key_values (especialidades);
+  especialidades_list = q_slist_sort (especialidades_list,
+      patan_especialidades_cmp_by_especialidad);
+
   l = especialidades_list;
+
+/*
+  QSList *my_list = NULL, *li;
+  my_list = q_slist_prepend (my_list, INT_TO_QPOINTER(20));
+  my_list = q_slist_prepend (my_list, INT_TO_QPOINTER(90));
+  my_list = q_slist_prepend (my_list, INT_TO_QPOINTER(40));
+  my_list = q_slist_prepend (my_list, INT_TO_QPOINTER(50));
+
+  my_list = q_slist_sort (my_list, qfunc_int_cmp);
+
+  li = my_list;
+  while (li) {
+    printf ("%d\n", QPOINTER_TO_INT (li->data));
+    li = li->next;
+  }
+
+
+*/
 
   while (l) {
     gchar *id, *especialidad;
@@ -160,6 +181,7 @@ main (int argc, char ** argv)
   gtk_widget_show_all (window);
 
   gtk_main ();
+
 
   return 0;
 }

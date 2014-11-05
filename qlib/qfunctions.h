@@ -12,5 +12,6 @@ typedef int (*QHashFunc)    (int size, qpointer key);
 
 int qfunc_hash_numeric_string    (int size, const char * string);
 int qfunc_strings_equal             (char * a, char * b);
+int qfunc_int_cmp                 (int a, int b);
 
 #endif /* __Q_FUNCTIONS_H__ */

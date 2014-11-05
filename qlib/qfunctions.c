@@ -16,3 +16,9 @@ qfunc_strings_equal (char * a, char * b)
 {
   return strcmp(a, b) == 0;
 }
+
+int
+qfunc_int_cmp (int a, int b)
+{
+  return a - b;
+}

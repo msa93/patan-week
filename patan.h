@@ -47,7 +47,7 @@
  *       <nombre> [string, el nombre del evento o fiesta]
  *       <precio> [int, costo de la entrada a la fiesta]
  *       <fecha> [QDate, fecha de la fiesta]
- *       <fiestas> [lista de ALUMNOS inscritos en la fiesta]
+ *       <alumnos> [lista de ALUMNOS inscritos en la fiesta]
  *     }
  *
  * TODO
@@ -95,6 +95,9 @@ void            patan_fiestas_insert  (QHashTable * hash_table, const char * id,
                                       QDate date);
 void            patan_registrar_asistencia      (QHashKeyValue * alumno_kv,
                                                 QHashKeyValue * fiesta_kv);
+
+int patan_especialidades_cmp_by_especialidad (QHashKeyValue * kv1,
+    QHashKeyValue * kv2);
 
 
 #define ALUMNO_VALUE(t)       ((AlumnoValue *) t)
