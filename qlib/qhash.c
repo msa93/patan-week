@@ -53,7 +53,7 @@ q_hash_table_insert (QHashTable * hash_table, qpointer key, qpointer value)
     key_val->value = value;
 
     hash_table->table[index] =\
-        q_slist_prepend (hash_table->table[index], (gpointer) key_val);
+        q_slist_prepend (hash_table->table[index], (qpointer) key_val);
   } else {
     key_val = list->data;
     key_val->value = value;

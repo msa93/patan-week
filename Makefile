@@ -4,4 +4,4 @@ patan:
         ./qlib/*.c \
 	patan.c \
 	main.c \
-	`pkg-config --cflags gtk+-3.0 --libs glib-2.0`
+#	`pkg-config --cflags gtk+-3.0 --libs glib-2.0`

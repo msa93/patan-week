@@ -41,7 +41,7 @@ q_slist_is_empty (QSList *list)
 }
 
 QSList*
-q_slist_find_compare (QSList * list, gpointer data, QEqualFunc func)
+q_slist_find_compare (QSList * list, qpointer data, QEqualFunc func)
 {
   QSList *l;
   for (l = list; l != NULL; l = l->next) {

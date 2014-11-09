@@ -8,6 +8,8 @@
 #include "qhash.h"
 #include "qfunctions.h"
 #include "qdate.h"
+#include "qlist.h"
+#include "qqueue.h"
 
 
 #define INT_TO_QPOINTER(i)        ((qpointer)  (long) (i))
