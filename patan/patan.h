@@ -1,4 +1,7 @@
 #include "qlib.h"
+#include "especialidades.h"
+#include "alumnos.h"
+#include "fiestas.h"
 
 #ifndef __PATAN_H__
 #define __PATAN_H__
@@ -58,50 +61,18 @@
  * == Fiesta de Cachimbos 2012.
 */
 
-typedef struct _AlumnoValue AlumnoValue;
-typedef struct _FiestaValue FiestaValue;
-
-struct _AlumnoValue {
-  char *nombre;
-  QDate fecha_nacimiento;
-  QHashKeyValue *especialidad;
-  /* This is an easter egg dedicated to our friend Oscar Fiestas */
-  /* List of QHashKeyValue containing a key-value pair of FiestaValue* */
-  QSList *fiestas; 
-};
 
 
 
-struct _FiestaValue {
-  char *nombre;
-  int precio;
-  QDate fecha;
-  /* List of QHashKeyValue containing a key-value pair of AlumnoValue* */
-  QSList *alumnos;
-};
 
 
-QHashTable*     patan_especialidades_new        ();
-void            patan_especialidades_insert     (QHashTable * hash_table,
-                                                const char * id,
-                                                const char * especialidad);
-QHashTable*     patan_alumnos_new     ();
-void            patan_alumnos_insert  (QHashTable * hash_table, const char * id,
-                                      const char * nombre, QDate date,
-                                      QHashKeyValue *especialidad_kv);
-QHashTable*     patan_fiestas_new     ();
-void            patan_fiestas_insert  (QHashTable * hash_table, const char * id,
-                                      const char * nombre, int precio,
-                                      QDate date);
 void            patan_registrar_asistencia      (QHashKeyValue * alumno_kv,
                                                 QHashKeyValue * fiesta_kv);
 
-int patan_especialidades_cmp_by_especialidad (QHashKeyValue * kv1,
-    QHashKeyValue * kv2);
 
 
-#define ALUMNO_VALUE(t)       ((AlumnoValue *) t)
-#define FIESTA_VALUE(t)       ((FiestaValue *) t)
-#define ESPECIALIDAD_VALUE(t) ((EspecialidadValue *) t)
+
+
+
 
 #endif /* __PATAN_H__ */

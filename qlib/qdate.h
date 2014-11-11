@@ -9,6 +9,6 @@ struct _QDate {
   int day;
 };
 
-QDate* q_date_new (int month, int day, int year);
+QDate q_date_new (int month, int day, int year);
 
 #endif /* __Q_DATE_H__ */

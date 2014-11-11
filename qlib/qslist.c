@@ -117,6 +117,24 @@ q_slist_sort (QSList * list, QCompareFunc cmp_func)
 }
 
 /**
+ * q_slist_foreach:
+ *
+ * Call a function for each element of the list.
+ *
+ **/
+
+void
+q_slist_foreach (QSList * list, QFunc func, qpointer user_data)
+{
+  QSList *l;
+  l = list;
+  while (l) {
+    func (l->data, user_data);
+    l = l->next;
+  }
+}
+
+/**
  * q_slist_free:
  *
  * Free a list and free each data element.

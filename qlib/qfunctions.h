@@ -9,6 +9,7 @@
 typedef int (*QEqualFunc)   (qpointer a, qpointer b);
 typedef int (*QCompareFunc) (qpointer a, qpointer b);
 typedef int (*QHashFunc)    (int size, qpointer key);
+typedef void (*QFunc)        (qpointer data, qpointer user_data);
 
 int qfunc_hash_numeric_string    (int size, const char * string);
 int qfunc_strings_equal             (char * a, char * b);
