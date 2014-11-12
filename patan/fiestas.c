@@ -3,7 +3,7 @@
 #include "fiestas.h"
 
 FiestaValue *
-fiesta_value_new (const char * nombre, int precio, QDate *fecha)
+fiesta_value_new (const char * nombre, int precio, QDate * fecha)
 {
   FiestaValue* fiesta_value;
 
@@ -17,6 +17,57 @@ fiesta_value_new (const char * nombre, int precio, QDate *fecha)
   return fiesta_value;
 }
 
+void
+patan_fiesta_value_print (qpointer data, qpointer user_data)
+{
+  QHashKeyValue *fiesta;
+  FiestaValue *val;
+
+  fiesta = Q_HASH_KEY_VALUE (data);
+  val = FIESTA_VALUE (fiesta->value);
+
+  printf ("%s\t\t%s\t\t%d/%d/%d\t\t%d\n", (char *) fiesta->key,
+      (char *) val->nombre, val->fecha.day, val->fecha.month,
+      val->fecha.year, val->precio);
+}
+
+/* Compare Functions */
+static int
+patan_fiestas_cmp_by_id (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  return strcmp (kv1->key, kv2->key);
+}
+
+static int
+patan_fiestas_cmp_by_nombre (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  FiestaValue *val1 = Q_HASH_KEY_VALUE (kv1->value);
+  FiestaValue *val2 = Q_HASH_KEY_VALUE (kv2->value);
+
+  return strcmp (val1->nombre, val2->nombre);
+}
+
+void
+patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
+{
+  patan_print_header ("ID", "NOMBRE", "FECHA", "PRECIO (S/.)",
+      NULL);
+
+  switch (sort_by) {
+    case PATAN_SORT_BY_ID:
+      fiestas_list = q_slist_sort (fiestas_list, patan_fiestas_cmp_by_id);
+      break;
+    case PATAN_SORT_BY_NOMBRE:
+      fiestas_list = q_slist_sort (fiestas_list, patan_fiestas_cmp_by_nombre);
+      break;
+    default:
+      break;
+  }
+  q_slist_foreach (fiestas_list, patan_fiesta_value_print, NULL);
+}
+
 QHashTable *
 patan_fiestas_new ()
 {
@@ -26,11 +77,12 @@ patan_fiestas_new ()
 
 void
 patan_fiestas_insert (QHashTable * hash_table, const char * id,
-    const char * nombre, int precio, QDate date)
+    const char * nombre, int precio, QDate * date)
 {
   q_hash_table_insert (hash_table, strdup (id),
-      fiesta_value_new (strdup (nombre), precio, &date));
+      fiesta_value_new (strdup (nombre), precio, date));
 }
+
 
 /* Parsear archivo de fiestas */
 

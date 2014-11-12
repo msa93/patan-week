@@ -23,7 +23,10 @@ FiestaValue*    fiesta_value_new      (const char * nombre, int precio,
                                       QDate *fecha);
 void            patan_fiestas_insert  (QHashTable * hash_table, const char * id,
                                       const char * nombre, int precio,
-                                      QDate date);
+                                      QDate * date);
 QHashTable*     patan_parse_fiestas   (const char * filename);
+void            patan_fiestas_print   (QSList * alumnos_list,
+                                      PatanSortBy sort_by);
+void            patan_fiesta_value_print (qpointer data, qpointer user_data);
 
 #endif
