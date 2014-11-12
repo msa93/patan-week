@@ -23,12 +23,12 @@ struct _AlumnoValue {
 QHashTable*     patan_alumnos_new       ();
 AlumnoValue*    alumno_value_new        (const char * nombre,
                                         QDate *fecha_nacimiento,
-                                        QHashKeyValue *especialidad);
+                                        QHashKeyValue * especialidad);
 void            patan_alumnos_insert    (QHashTable * hash_table,
                                         const char * id, const char * nombre,
-                                        QDate date,
-                                        QHashKeyValue *especialidad_kv);
+                                        QDate * date,
+                                        QHashKeyValue * especialidad_kv);
 QHashTable*     patan_parse_alumnos     (const char * filename,
-                                        QHashTable *especialidades);
+                                        QHashTable * especialidades);
 
 #endif

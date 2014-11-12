@@ -1,4 +1,5 @@
 #include "qlib.h"
+#include "utils.h"
 #include "especialidades.h"
 #include "alumnos.h"
 #include "fiestas.h"
@@ -60,8 +61,6 @@
  * todos los alumnos que estudian en Ingenieria Informatica y fueron a la FIESTA
  * == Fiesta de Cachimbos 2012.
 */
-
-
 
 
 

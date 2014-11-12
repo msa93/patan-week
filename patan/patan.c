@@ -128,7 +128,7 @@ patan_parse_asistencia (const char * filename, QHashTable *fiestas,
   f = fopen (filename, "r");
 
   if (!f)
-    return NULL;
+    return;
 
 
   do {

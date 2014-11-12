@@ -25,6 +25,13 @@ patan_especialidades_cmp_by_especialidad (QHashKeyValue * kv1,
   return strcmp (kv1->value, kv2->value);
 }
 
+static int
+patan_especialidades_cmp_by_id (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  return strcmp (kv1->key, kv2->key);
+}
+
 void
 patan_especialidad_value_print (qpointer data, qpointer user_data)
 {
@@ -35,11 +42,22 @@ patan_especialidad_value_print (qpointer data, qpointer user_data)
 }
 
 void
-patan_especialidades_print (QSList * especialidades_list)
+patan_especialidades_print (QSList * especialidades_list, PatanSortBy sort_by)
 {
-  especialidades_list = q_slist_sort (especialidades_list,
-      patan_especialidades_cmp_by_especialidad);
   printf ("ID\t\t\tESPECIALIDAD\n");
+
+  switch (sort_by) {
+    case PATAN_SORT_BY_ESPECIALIDAD:
+      especialidades_list = q_slist_sort (especialidades_list,
+          patan_especialidades_cmp_by_especialidad);
+      break;
+    case PATAN_SORT_BY_ID:
+      especialidades_list = q_slist_sort (especialidades_list,
+          patan_especialidades_cmp_by_id);
+      break;
+    default:
+      break;
+  }
   q_slist_foreach (especialidades_list, patan_especialidad_value_print, NULL);
 }
 

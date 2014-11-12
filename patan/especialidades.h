@@ -15,7 +15,8 @@ int         patan_especialidades_cmp_by_especialidad (QHashKeyValue * kv1,
 void        patan_especialidad_value_print (qpointer data,
                                             qpointer user_data);
 
-void        patan_especialidades_print (QSList * especialidades_list);
+void        patan_especialidades_print (QSList * especialidades_list,
+          PatanSortBy sort_by);
 
 QHashTable* patan_especialidades_new (void);
 

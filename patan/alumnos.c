@@ -6,7 +6,7 @@ AlumnoValue *
 alumno_value_new (const char * nombre, QDate *fecha_nacimiento,
     QHashKeyValue *especialidad)
 {
-  AlumnoValue* alumno_value;
+  AlumnoValue *alumno_value;
 
   alumno_value = malloc (sizeof (AlumnoValue));
   alumno_value->nombre = strdup (nombre);
@@ -18,6 +18,45 @@ alumno_value_new (const char * nombre, QDate *fecha_nacimiento,
   return alumno_value;
 }
 
+
+void
+patan_alumno_value_print (qpointer data, qpointer user_data)
+{
+  QHashKeyValue *alumno;
+  AlumnoValue *val = ALUMNO_VALUE (data);
+
+  alumno = Q_HASH_KEY_VALUE (data);
+  printf ("%s\t\t\t%s\t\t\t%d/%d/%d\n", (char *) alumno->key, (char *) val->nombre,
+    val->fecha_nacimiento.day, val->fecha_nacimiento.month,
+    val->fecha_nacimiento.year);
+}
+
+/* Compare Functions */
+static int
+patan_alumnos_cmp_by_id (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  return strcmp (kv1->key, kv2->key);
+}
+
+
+void
+patan_alumnos_print (QSList * alumnos_list, PatanSortBy sort_by)
+{
+  printf ("ID\t\t\tESPECIALIDAD\n");
+
+  switch (sort_by) {
+    case PATAN_SORT_BY_ID:
+      alumnos_list = q_slist_sort (alumnos_list,
+          patan_alumnos_cmp_by_id);
+      break;
+    default:
+      break;
+  }
+  q_slist_foreach (alumnos_list, patan_alumno_value_print, NULL);
+}
+
+
 QHashTable *
 patan_alumnos_new ()
 {
@@ -27,10 +66,10 @@ patan_alumnos_new ()
 
 void
 patan_alumnos_insert (QHashTable * hash_table, const char * id,
-    const char * nombre, QDate date, QHashKeyValue *especialidad_kv)
+    const char * nombre, QDate *date, QHashKeyValue *especialidad_kv)
 {
   q_hash_table_insert (hash_table, strdup (id),
-      alumno_value_new (strdup (nombre), &date, especialidad_kv));
+      alumno_value_new (strdup (nombre), date, especialidad_kv));
 }
 
 
