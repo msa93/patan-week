@@ -10,8 +10,18 @@ typedef enum {
   PATAN_OPT_MOSTRAR_ESPECIALIDADES = 4,
   PATAN_OPT_MOSTRAR_ALUMNOS = 5,
   PATAN_OPT_MOSTRAR_FIESTAS = 6,
+  /* Especialidades */
   PATAN_OPT_SORT_ESPECIALIDADES_BY_ID = 1,
   PATAN_OPT_SORT_ESPECIALIDADES_BY_ESPECIALIDAD = 2,
+  /* Alumnos */
+  PATAN_OPT_SORT_ALUMNOS_BY_ID = 1,
+  PATAN_OPT_SORT_ALUMNOS_BY_NOMBRE = 2,
+  PATAN_OPT_SORT_ALUMNOS_BY_FECHA_NACIMIENTO = 3,
+  /* Fiestas */
+  PATAN_OPT_SORT_FIESTAS_BY_ID = 1,
+  PATAN_OPT_SORT_FIESTAS_BY_NOMBRE = 2,
+  PATAN_OPT_SORT_FIESTAS_BY_FECHA = 3,
+  /* Extras */
   PATAN_OPT_BACK = 0,
   PATAN_OPT_EXIT = -1
 } PatanOpt;
@@ -64,6 +74,16 @@ patan_console_show_sort_by_especialidades ()
   printf ("-1) Back.\n");
 }
 
+static void
+patan_console_show_sort_by_alumnos ()
+{
+  printf ("1) Ordenar por id.\n");
+  printf ("2) Ordenar por nombre.\n");
+  printf ("3) Ordenar por fecha de nacimiento.\n");
+  printf ("4) Ordenar por fecha de especialidad.\n");
+  printf ("-1) Back.\n");
+}
+
 qboolean
 patan_console_menu (PatanEspecialidades * especialidades,
   PatanAlumnos * alumnos, PatanFiestas * fiestas)
@@ -71,6 +91,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
   PatanOpt opt;
   qboolean ret;
 
+  ret = TRUE;
   patan_console_show_main_menu ();
 
   printf ("Ingrese opcion: ");
@@ -78,8 +99,11 @@ patan_console_menu (PatanEspecialidades * especialidades,
 
   switch (opt) {
     case PATAN_OPT_REGISTRAR_ESPECIALIDAD:
+      break;
     case PATAN_OPT_REGISTRAR_ALUMNO:
+      break;
     case PATAN_OPT_REGISTRAR_FIESTA:
+      break;
     case PATAN_OPT_MOSTRAR_ESPECIALIDADES:
     {
       PatanSortBy sort_by;
@@ -104,9 +128,43 @@ patan_console_menu (PatanEspecialidades * especialidades,
           opt = PATAN_OPT_BACK;
           break;
       }
+      break;
+    }
+    case PATAN_OPT_MOSTRAR_ALUMNOS:
+    {
+      PatanSortBy sort_by;
+      QSList *alumnos_list;
+
+      patan_console_show_sort_by_alumnos ();
+
+      printf ("Ingrese opcion: ");
+      scanf ("%d", &opt);
+
+      switch (opt) {
+        case PATAN_OPT_SORT_ALUMNOS_BY_ID:
+          alumnos_list = q_hash_table_get_key_values (alumnos);
+          patan_alumnos_print (alumnos_list, PATAN_SORT_BY_ID);
+          break;
+        case PATAN_OPT_SORT_ALUMNOS_BY_NOMBRE:
+          alumnos_list = q_hash_table_get_key_values (alumnos);
+          patan_alumnos_print (alumnos_list,
+              PATAN_SORT_BY_NOMBRE);
+          break;
+        case PATAN_OPT_SORT_ALUMNOS_BY_FECHA_NACIMIENTO:
+          /* TODO */
+          break;
+        case PATAN_OPT_SORT_ALUMNOS_BY_ESPECIALIDAD:
+          /* TODO */
+          break;
+        default:
+          opt = PATAN_OPT_BACK;
+          break;
+      }
+      break;
     }
     case PATAN_OPT_EXIT:
       ret = FALSE;
+      break;
     default:
       ret = TRUE;
   }
