@@ -26,9 +26,8 @@ patan_fiesta_value_print (qpointer data, qpointer user_data)
   fiesta = Q_HASH_KEY_VALUE (data);
   val = FIESTA_VALUE (fiesta->value);
 
-  printf ("%s\t\t%s\t\t%d/%d/%d\t\t%d\n", (char *) fiesta->key,
-      (char *) val->nombre, val->fecha.day, val->fecha.month,
-      val->fecha.year, val->precio);
+  printf ("%-5s\t\t\t%-20s\t\t\t%-15s\t\t\t%-4d\n", (char *) fiesta->key,
+      (char *) val->nombre, q_date_to_string (&(val->fecha)), val->precio);
 }
 
 /* Compare Functions */

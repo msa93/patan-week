@@ -32,6 +32,7 @@ main (int argc, char ** argv)
   QSList *fiestas_list;
 
   patan_init (&especialidades, &alumnos, &fiestas);
+  //especialidades = patan_parse_especialidades ("especialidad.txt");
 
   patan_especialidades_insert (especialidades, "005", "Artes Escenicas");
   patan_especialidades_insert (especialidades, "003", "Ingenieria Mecanica");
@@ -40,11 +41,12 @@ main (int argc, char ** argv)
   patan_especialidades_insert (especialidades, "004", "Matematica");
   patan_especialidades_insert (especialidades, "006", "Derecho");
 
+
   d1 = q_date_new (1, 17, 1994);
   d2 = q_date_new (3, 19, 1995);
   d3 = q_date_new (5, 5, 1992);
   d4 = q_date_new (4, 8, 1992);
-
+  
   patan_alumnos_insert (alumnos, "20105515", "Fabian Orccon", &d1, NULL);
   patan_alumnos_insert (alumnos, "20128060", "Alberto Suarez", &d2, NULL);
   patan_alumnos_insert (alumnos, "20115365", "Jorge Rodriguez", &d3, NULL);
@@ -56,7 +58,7 @@ main (int argc, char ** argv)
 
   patan_fiestas_insert (fiestas, "2", "Minerva", 30, &d5);
   patan_fiestas_insert (fiestas, "1", "Cachimbos Locos 2013", 60, &d6);
-  patan_fiestas_insert (fiestas, "3", "Fiesta de Fin de Ciclo 2014", 90, &d7);
+  patan_fiestas_insert (fiestas, "3", "Fiesta de Finales", 90, &d7);
 
   especialidades_list = q_hash_table_get_key_values (especialidades);
   patan_especialidades_print (especialidades_list, PATAN_SORT_BY_ESPECIALIDAD);
