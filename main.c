@@ -3,7 +3,12 @@
 #include "patan.h"
 
 typedef enum {
-  PATAN_OPT_EXIT = -1
+  PATAN_OPT_REGISTRAR_ESPECIALIDAD = 1,
+  PATAN_OPT_REGISTRAR_ALUMNO = 2,
+  PATAN_OPT_REGISTRAR_FIESTA = 3,
+  PATAN_OPT_MOSTRAR_ESPECIALIDADES = 4,
+  PATAN_OPT_MOSTRAR_ALUMNOS = 5,
+  PATAN_OPT_MOSTRAR_FIESTAS = 6
 } PatanOpt;
 
 void
@@ -15,6 +20,59 @@ patan_init (PatanEspecialidades ** especialidades,
   *fiestas = patan_fiestas_new ();
 }
 
+void
+patan_console_ask_for_files (PatanEspecialidades ** especialidades,
+  PatanAlumnos ** alumnos, PatanFiestas ** fiestas)
+{
+  char filename[100];
+
+  printf ("Ingrese archivo de especialidades: ");
+  scanf ("%s", filename);
+  *especialidades = patan_parse_especialidades (filename);
+
+  printf ("Ingrese archivo de alumnos: ");
+  scanf ("%s", filename);
+  *alumnos = patan_parse_alumnos (filename, *especialidades);
+
+  printf ("Ingrese archivo de fiestas: ");
+  scanf ("%s", filename);
+  *fiestas = patan_parse_fiestas (filename);
+}
+
+static void
+patan_console_show_menu ()
+{
+  printf ("1) Registrar especialidad.\n");
+  printf ("2) Registrar alumno.\n");
+  printf ("3) Registrar fiesta.\n"); 
+  printf ("4) Mostrar especialidades.\n"); 
+  printf ("5) Mostrar alumnos.\n");
+  printf ("6) Mostrar fiestas.\n");
+  printf ("-1) Quit.\n");
+}
+
+/*
+void
+patan_console_menu (PatanEspecialidades ** especialidades,
+  PatanAlumnos ** alumnos, PatanFiestas ** fiestas)
+{
+  PatanOpt opt;
+  patan_console_show_menu ();
+
+  printf ("Ingrese opcion: ");
+
+  switch (opt) {
+    case PATAN_REGISTRAR_ESPECIALIDAD:
+    case PATAN_REGISTRAR_ALUMNO:
+    case PATAN_REGISTRAR_FIESTA:
+    case PATAN_MOSTRAR_ESPECIALIDADES:
+      
+  }
+}
+*/
+  
+
+
 int
 main (int argc, char ** argv)
 {
@@ -22,6 +80,9 @@ main (int argc, char ** argv)
   PatanAlumnos *alumnos;
   PatanFiestas *fiestas;
 
+  patan_console_ask_for_files (&especialidades, &alumnos, &fiestas);
+
+/*
   QDate d1, d2, d3, d4;
   QDate d5, d6, d7; 
 
@@ -68,6 +129,10 @@ main (int argc, char ** argv)
 
   fiestas_list = q_hash_table_get_key_values (fiestas);
   patan_fiestas_print (fiestas_list, PATAN_SORT_BY_ID);
+
+*/
+
+  
 
   return 0;
 }
