@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "qlib.h"
 #include "patan.h"
@@ -8,7 +9,11 @@ typedef enum {
   PATAN_OPT_REGISTRAR_FIESTA = 3,
   PATAN_OPT_MOSTRAR_ESPECIALIDADES = 4,
   PATAN_OPT_MOSTRAR_ALUMNOS = 5,
-  PATAN_OPT_MOSTRAR_FIESTAS = 6
+  PATAN_OPT_MOSTRAR_FIESTAS = 6,
+  PATAN_OPT_SORT_ESPECIALIDADES_BY_ID = 1,
+  PATAN_OPT_SORT_ESPECIALIDADES_BY_ESPECIALIDAD = 2,
+  PATAN_OPT_BACK = 0,
+  PATAN_OPT_EXIT = -1
 } PatanOpt;
 
 void
@@ -40,7 +45,7 @@ patan_console_ask_for_files (PatanEspecialidades ** especialidades,
 }
 
 static void
-patan_console_show_menu ()
+patan_console_show_main_menu ()
 {
   printf ("1) Registrar especialidad.\n");
   printf ("2) Registrar alumno.\n");
@@ -51,26 +56,69 @@ patan_console_show_menu ()
   printf ("-1) Quit.\n");
 }
 
-/*
-void
-patan_console_menu (PatanEspecialidades ** especialidades,
-  PatanAlumnos ** alumnos, PatanFiestas ** fiestas)
+static void
+patan_console_show_sort_by_especialidades ()
+{
+  printf ("1) Ordenar por id.\n");
+  printf ("2) Ordenar por especialidad.\n");
+  printf ("-1) Back.\n");
+}
+
+qboolean
+patan_console_menu (PatanEspecialidades * especialidades,
+  PatanAlumnos * alumnos, PatanFiestas * fiestas)
 {
   PatanOpt opt;
-  patan_console_show_menu ();
+  qboolean ret;
+
+  patan_console_show_main_menu ();
 
   printf ("Ingrese opcion: ");
+  scanf ("%d", &opt);
 
   switch (opt) {
-    case PATAN_REGISTRAR_ESPECIALIDAD:
-    case PATAN_REGISTRAR_ALUMNO:
-    case PATAN_REGISTRAR_FIESTA:
-    case PATAN_MOSTRAR_ESPECIALIDADES:
-      
+    case PATAN_OPT_REGISTRAR_ESPECIALIDAD:
+    case PATAN_OPT_REGISTRAR_ALUMNO:
+    case PATAN_OPT_REGISTRAR_FIESTA:
+    case PATAN_OPT_MOSTRAR_ESPECIALIDADES:
+    {
+      PatanSortBy sort_by;
+      QSList *especialidades_list;
+
+      patan_console_show_sort_by_especialidades ();
+
+      printf ("Ingrese opcion: ");
+      scanf ("%d", &opt);
+
+      switch (opt) {
+        case PATAN_OPT_SORT_ESPECIALIDADES_BY_ID:
+          especialidades_list = q_hash_table_get_key_values (especialidades);
+          patan_especialidades_print (especialidades_list, PATAN_SORT_BY_ID);
+          break;
+        case PATAN_OPT_SORT_ESPECIALIDADES_BY_ESPECIALIDAD:
+          especialidades_list = q_hash_table_get_key_values (especialidades);
+          patan_especialidades_print (especialidades_list,
+              PATAN_SORT_BY_ESPECIALIDAD);
+          break;
+        default:
+          opt = PATAN_OPT_BACK;
+          break;
+      }
+    }
+    case PATAN_OPT_EXIT:
+      ret = FALSE;
+    default:
+      ret = TRUE;
   }
+  return ret;
 }
-*/
-  
+
+void
+patan_console_loop (PatanEspecialidades * especialidades,
+  PatanAlumnos * alumnos, PatanFiestas * fiestas)
+{
+  while (patan_console_menu (especialidades, alumnos, fiestas) == TRUE);
+}
 
 
 int
@@ -81,6 +129,8 @@ main (int argc, char ** argv)
   PatanFiestas *fiestas;
 
   patan_console_ask_for_files (&especialidades, &alumnos, &fiestas);
+
+  patan_console_loop (especialidades, alumnos, fiestas);
 
 /*
   QDate d1, d2, d3, d4;
