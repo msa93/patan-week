@@ -56,14 +56,14 @@ patan_alumnos_cmp_by_nombre (QHashKeyValue * kv1,
 
 static int
 patan_alumnos_cmp_by_fecha (QHashKeyValue * kv1,
-    QHAashKeyValue * kv2)
+    QHashKeyValue * kv2)
 {
-  QDate* date1, *date2;
-  AlumnoValue *val1 = Q_HASH_KEY_VALUE (kv1->value);
-  AlumnoValue *val2 = Q_HASH_KEY_VALUE (kv2->value);
+  QDate *date1, *date2;
+  AlumnoValue *val1 = ALUMNO_VALUE (kv1->value);
+  AlumnoValue *val2 = ALUMNO_VALUE (kv2->value);
   date1 = &(val1->fecha_nacimiento);
-  date2 = val2->fecha_nacimiento;  
-  return qfunc_date_cmp (date1, date2)
+  date2 = &(val2->fecha_nacimiento);  
+  return qfunc_date_cmp (date1, date2);
 }
 
 void

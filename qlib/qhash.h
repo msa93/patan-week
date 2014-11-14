@@ -22,6 +22,7 @@ struct _QHashTable {
   int size;
   QSList **table;
   QEqualFunc key_equal_func;
+  QHashFunc hash_func;
   int (*QEqualFunc)   (qpointer a, qpointer b);
 };
 
