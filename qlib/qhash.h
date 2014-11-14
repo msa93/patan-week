@@ -14,15 +14,15 @@ typedef struct _QHashTable QHashTable;
 
 
 struct _QHashKeyValue {
-  qpointer *key;
-  qpointer *value;
+  qpointer key;
+  qpointer value;
 };
 
 struct _QHashTable {
   int size;
   QSList **table;
   QEqualFunc key_equal_func;
-  QHashFunc hash_func;
+  int (*QEqualFunc)   (qpointer a, qpointer b);
 };
 
 QHashTable*     q_hash_table_new                (QHashFunc hash_func, 

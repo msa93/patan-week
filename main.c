@@ -153,6 +153,9 @@ patan_console_menu (PatanEspecialidades * especialidades,
           break;
         case PATAN_OPT_SORT_ALUMNOS_BY_FECHA_NACIMIENTO:
           /* TODO */
+          alumnos_list = q_hash_table_get_key_values (alumnos);
+          patan_alumnos_print (alumnos_list,
+              PATAN_SORT_BY_FECHA);         
           break;
         case PATAN_OPT_SORT_ALUMNOS_BY_ESPECIALIDAD:
           /* TODO */

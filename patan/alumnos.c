@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "alumnos.h"
 
+
 AlumnoValue *
 alumno_value_new (const char * nombre, QDate *fecha_nacimiento,
     QHashKeyValue *especialidad)
@@ -53,6 +54,17 @@ patan_alumnos_cmp_by_nombre (QHashKeyValue * kv1,
   return strcmp (val1->nombre, val2->nombre);
 }
 
+static int
+patan_alumnos_cmp_by_fecha (QHashKeyValue * kv1,
+    QHAashKeyValue * kv2)
+{
+  QDate* date1, *date2;
+  AlumnoValue *val1 = Q_HASH_KEY_VALUE (kv1->value);
+  AlumnoValue *val2 = Q_HASH_KEY_VALUE (kv2->value);
+  date1 = &(val1->fecha_nacimiento);
+  date2 = val2->fecha_nacimiento;  
+  return qfunc_date_cmp (date1, date2)
+}
 
 void
 patan_alumnos_print (QSList * alumnos_list, PatanSortBy sort_by)
@@ -66,6 +78,9 @@ patan_alumnos_print (QSList * alumnos_list, PatanSortBy sort_by)
       break;
     case PATAN_SORT_BY_NOMBRE:
       alumnos_list = q_slist_sort (alumnos_list, patan_alumnos_cmp_by_nombre);
+      break;
+    case PATAN_SORT_BY_FECHA:
+      alumnos_list = q_slist_sort (alumnos_list, patan_alumnos_cmp_by_fecha);
       break;
     default:
       break;
