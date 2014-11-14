@@ -85,6 +85,15 @@ patan_console_show_sort_by_alumnos ()
   printf ("-1) Back.\n");
 }
 
+static void
+patan_console_show_sort_by_fiestas ()
+{
+  printf ("1) Ordenar por id.\n");
+  printf ("2) Ordenar por nombre.\n");
+  printf ("3) Ordenar por fecha de fiesta.\n");
+  printf ("-1) Back.\n");
+}
+
 qboolean
 patan_console_menu (PatanEspecialidades * especialidades,
   PatanAlumnos * alumnos, PatanFiestas * fiestas)
@@ -151,12 +160,45 @@ patan_console_menu (PatanEspecialidades * especialidades,
           patan_alumnos_print (alumnos_list,
               PATAN_SORT_BY_NOMBRE);
           break;
-        case PATAN_OPT_SORT_ALUMNOS_BY_FECHA_NACIMIENTO:
-          /* TODO */
+        case PATAN_OPT_SORT_ALUMNOS_BY_FECHA_NACIMIENTO:          
+          alumnos_list = q_hash_table_get_key_values (alumnos);
+          patan_alumnos_print (alumnos_list,
+              PATAN_SORT_BY_FECHA);         
           break;
-        case PATAN_OPT_SORT_ALUMNOS_BY_ESPECIALIDAD:
-          /* TODO */
+        case PATAN_OPT_SORT_ALUMNOS_BY_ESPECIALIDAD:          
+          alumnos_list = q_hash_table_get_key_values (alumnos);
+          patan_alumnos_print (alumnos_list,
+              PATAN_SORT_BY_ESPECIALIDAD);
           break;
+        default:
+          opt = PATAN_OPT_BACK;
+          break;
+      }
+      break;
+    }
+    case PATAN_OPT_MOSTRAR_FIESTAS:
+    {
+      PatanSortBy sort_by;
+      QSList *fiestas_list;
+
+      patan_console_show_sort_by_fiestas ();
+
+      printf ("Ingrese opcion: ");
+      scanf ("%d", &opt);
+
+      switch (opt) {
+        case PATAN_OPT_SORT_FIESTAS_BY_ID:
+          fiestas_list = q_hash_table_get_key_values (fiestas);
+          patan_fiestas_print (fiestas_list, PATAN_SORT_BY_ID);
+          break;
+        case PATAN_OPT_SORT_FIESTAS_BY_NOMBRE:
+          fiestas_list = q_hash_table_get_key_values (fiestas);
+          patan_fiestas_print (fiestas_list, PATAN_SORT_BY_NOMBRE);
+          break;
+        case PATAN_OPT_SORT_FIESTAS_BY_FECHA:
+          fiestas_list = q_hash_table_get_key_values (fiestas);
+          patan_fiestas_print (fiestas_list, PATAN_SORT_BY_FECHA);
+        break;
         default:
           opt = PATAN_OPT_BACK;
           break;

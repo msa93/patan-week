@@ -48,6 +48,19 @@ patan_fiestas_cmp_by_nombre (QHashKeyValue * kv1,
   return strcmp (val1->nombre, val2->nombre);
 }
 
+static int
+patan_fiestas_cmp_by_fecha (QHashKeyValue * kv1,
+    QHashKeyValue * kv2)
+{
+  QDate *date1, *date2;
+  FiestaValue *val1 = FIESTA_VALUE (kv1->value);
+  FiestaValue *val2 = FIESTA_VALUE (kv2->value);
+  date1 = &(val1->fecha);
+  date2 = &(val2->fecha);
+
+  return qfunc_date_cmp (date1, date2);
+}
+
 void
 patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
 {
@@ -60,6 +73,9 @@ patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
       break;
     case PATAN_SORT_BY_NOMBRE:
       fiestas_list = q_slist_sort (fiestas_list, patan_fiestas_cmp_by_nombre);
+      break;
+    case PATAN_SORT_BY_FECHA:
+      fiestas_list = q_slist_sort (fiestas_list, patan_fiestas_cmp_by_fecha);
       break;
     default:
       break;
