@@ -65,6 +65,11 @@ q_queue_pop_tail (QQueue * queue)
   return NULL;
 }
 
+QList *
+q_queue_find (QQueue * queue, qpointer data, QEqualFunc func)
+{
+  return q_list_find_compare (queue->head, data, func);
+}
 
 /**
  * q_slist_free:

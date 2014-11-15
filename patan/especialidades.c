@@ -44,7 +44,8 @@ patan_especialidad_value_print (qpointer data, qpointer user_data)
 void
 patan_especialidades_print (QSList * especialidades_list, PatanSortBy sort_by)
 {
-  printf ("ID\t\t\tESPECIALIDAD\n");
+  patan_print_header ("ID", PATAN_CONSOLE_STR,
+      "ESPECIALIDAD", PATAN_CONSOLE_STR, NULL);
 
   switch (sort_by) {
     case PATAN_SORT_BY_ESPECIALIDAD:

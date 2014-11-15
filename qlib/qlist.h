@@ -19,6 +19,11 @@ qboolean    q_list_is_empty           (QList *list);
 QList*      q_list_find_compare       (QList * list, qpointer data,
                                        QEqualFunc func);
 QList*      q_list_free               (QList * list);
+QList*      q_list_find_compare       (QList * list, qpointer data,
+                                       QEqualFunc func);
+
+void        q_list_foreach            (QList * list, QFunc func,
+                                       qpointer user_data);
 
 
 #endif /* __Q_LIST_H__ */

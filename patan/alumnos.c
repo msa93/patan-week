@@ -30,9 +30,10 @@ patan_alumno_value_print (qpointer data, qpointer user_data)
   alumno = Q_HASH_KEY_VALUE (data);
   val = ALUMNO_VALUE (alumno->value);
 
-  printf ("%s\t\t%s\t\t%02d/%02d/%d\t\t%s\n", (char *) alumno->key,
-      (char *) val->nombre, val->fecha_nacimiento.day,
-      val->fecha_nacimiento.month, val->fecha_nacimiento.year,
+  printf (PATAN_CONSOLE_STR_FORMAT PATAN_CONSOLE_STR_FORMAT \
+      PATAN_CONSOLE_STR_FORMAT PATAN_CONSOLE_STR_FORMAT "\n" ,
+      alumno->key, val->nombre,
+      q_date_to_string (&(val->fecha_nacimiento)),
       val->especialidad ? val->especialidad->value : NULL);
 }
 
@@ -48,8 +49,8 @@ static int
 patan_alumnos_cmp_by_nombre (QHashKeyValue * kv1,
     QHashKeyValue * kv2)
 {
-  AlumnoValue *val1 = Q_HASH_KEY_VALUE (kv1->value);
-  AlumnoValue *val2 = Q_HASH_KEY_VALUE (kv2->value);
+  AlumnoValue *val1 = ALUMNO_VALUE (kv1->value);
+  AlumnoValue *val2 = ALUMNO_VALUE (kv2->value);
 
   return strcmp (val1->nombre, val2->nombre);
 }
@@ -79,8 +80,8 @@ patan_alumnos_cmp_by_especial (QHashKeyValue * kv1,
 void
 patan_alumnos_print (QSList * alumnos_list, PatanSortBy sort_by)
 {
-  patan_print_header ("ID", "NOMBRE", "FECHA NAC", "ESPECIALIDAD",
-      NULL);
+  patan_print_header ("ID", PATAN_CONSOLE_STR, "NOMBRE", PATAN_CONSOLE_STR,
+      "FECHA NAC", PATAN_CONSOLE_STR, "ESPECIALIDAD", PATAN_CONSOLE_STR, NULL);
 
   switch (sort_by) {
     case PATAN_SORT_BY_ID:

@@ -7,9 +7,16 @@ typedef enum {
   PATAN_OPT_REGISTRAR_ESPECIALIDAD = 1,
   PATAN_OPT_REGISTRAR_ALUMNO = 2,
   PATAN_OPT_REGISTRAR_FIESTA = 3,
-  PATAN_OPT_MOSTRAR_ESPECIALIDADES = 4,
-  PATAN_OPT_MOSTRAR_ALUMNOS = 5,
-  PATAN_OPT_MOSTRAR_FIESTAS = 6,
+  PATAN_OPT_REGISTRAR_INTERES = 4,
+  PATAN_OPT_REGISTRAR_CAPACIDAD_FIESTA = 5,
+  PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES = 6,
+  PATAN_OPT_MOSTRAR_ESPECIALIDADES = 7,
+  PATAN_OPT_MOSTRAR_ALUMNOS = 8,
+  PATAN_OPT_MOSTRAR_FIESTAS = 9,
+  PATAN_OPT_MOSTRAR_FIESTA_REGISTRO_INTERES = 10,
+  PATAN_OPT_MOSTRAR_FIESTA_ASISTENTES = 11,
+  PATAN_OPT_MOSTRAR_ALUMNO_FIESTAS_ASISTIDAS = 12,
+  
   /* Especialidades */
   PATAN_OPT_SORT_ESPECIALIDADES_BY_ID = 1,
   PATAN_OPT_SORT_ESPECIALIDADES_BY_ESPECIALIDAD = 2,
@@ -58,12 +65,18 @@ patan_console_ask_for_files (PatanEspecialidades ** especialidades,
 static void
 patan_console_show_main_menu ()
 {
-  printf ("1) Registrar especialidad.\n");
-  printf ("2) Registrar alumno.\n");
-  printf ("3) Registrar fiesta.\n"); 
-  printf ("4) Mostrar especialidades.\n"); 
-  printf ("5) Mostrar alumnos.\n");
-  printf ("6) Mostrar fiestas.\n");
+  printf (" 1) Registrar especialidad.\n");
+  printf (" 2) Registrar alumno.\n");
+  printf (" 3) Registrar fiesta.\n");
+  printf (" 4) Registrar interes.\n");
+  printf (" 5) Registrar capacidad de fiesta.\n");
+  printf (" 6) Registrar registro de interes.\n");
+  printf (" 7) Mostrar especialidades.\n"); 
+  printf (" 8) Mostrar alumnos.\n");
+  printf (" 9) Mostrar fiestas.\n");
+  printf ("10) Mostrar registro de interés.\n");
+  printf ("11) Mostrar lista de asistentes.\n");
+  printf ("12) Mostrar fiestas a la que asistió un alumno.\n");
   printf ("-1) Quit.\n");
 }
 
@@ -109,10 +122,48 @@ patan_console_menu (PatanEspecialidades * especialidades,
 
   switch (opt) {
     case PATAN_OPT_REGISTRAR_ESPECIALIDAD:
+    {
+      char id[100];
+      char especialidad[500];
+      printf ("id: ");
+      scanf ("%s", id);
+      printf ("especialidad: ");
+      scanf ("% [^\n]s", especialidad);
+      gets (especialidad);
+      patan_especialidades_insert (especialidades, id, especialidad);
       break;
+    }
     case PATAN_OPT_REGISTRAR_ALUMNO:
       break;
     case PATAN_OPT_REGISTRAR_FIESTA:
+      break;
+    case PATAN_OPT_REGISTRAR_INTERES:
+    {
+      QHashKeyValue *alumno_kv;
+      QHashKeyValue *fiesta_kv;
+      char codigo[9];
+      char fiesta[100];
+      printf ("Ingrese nombre de fiesta: ");
+      scanf ("%s", fiesta);
+
+      fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
+          patan_fiesta_eq_nombre);
+      if (fiesta_kv) {
+        printf ("Ingrese código de alumno: \n");
+        scanf ("%s", codigo);
+        alumno_kv = q_hash_table_get_key_value_by_key (alumnos, codigo);
+        if (alumno_kv) {
+          patan_fiesta_registrar_interes (fiesta_kv, alumno_kv);
+        } else
+          printf ("Codigo de alumno no registrado.\n");
+      } else
+        printf ("Nombre de fiesta no registrado.\n");      
+      break;
+    }
+      break;
+    case PATAN_OPT_REGISTRAR_CAPACIDAD_FIESTA:
+      break;
+    case PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES:
       break;
     case PATAN_OPT_MOSTRAR_ESPECIALIDADES:
     {
@@ -198,13 +249,32 @@ patan_console_menu (PatanEspecialidades * especialidades,
         case PATAN_OPT_SORT_FIESTAS_BY_FECHA:
           fiestas_list = q_hash_table_get_key_values (fiestas);
           patan_fiestas_print (fiestas_list, PATAN_SORT_BY_FECHA);
-        break;
+          break;
         default:
           opt = PATAN_OPT_BACK;
           break;
       }
       break;
     }
+    case PATAN_OPT_MOSTRAR_FIESTA_REGISTRO_INTERES:
+    {
+      QHashKeyValue *fiesta_kv;
+      char fiesta[100];
+      printf ("Ingrese nombre de fiesta: ");
+      scanf ("%s", fiesta);
+
+      fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
+          patan_fiesta_eq_nombre);
+      if (fiesta_kv)
+        patan_fiesta_print_registro_interes (fiesta_kv, 0);
+      else
+        printf ("Nombre de fiesta no registrado.\n");      
+      break;
+    }
+    case PATAN_OPT_MOSTRAR_FIESTA_ASISTENTES: 
+      break;
+    case PATAN_OPT_MOSTRAR_ALUMNO_FIESTAS_ASISTIDAS:
+      break;
     case PATAN_OPT_EXIT:
       ret = FALSE;
       break;

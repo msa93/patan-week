@@ -14,6 +14,7 @@ fiesta_value_new (const char * nombre, int precio, QDate * fecha)
   fiesta_value->fecha.month = fecha->month;
   fiesta_value->fecha.year = fecha->year;
   fiesta_value->alumnos = NULL;
+  fiesta_value->registro_interes = q_queue_new ();
   return fiesta_value;
 }
 
@@ -26,8 +27,9 @@ patan_fiesta_value_print (qpointer data, qpointer user_data)
   fiesta = Q_HASH_KEY_VALUE (data);
   val = FIESTA_VALUE (fiesta->value);
 
-  printf ("%-5s\t\t\t%-20s\t\t\t%-15s\t\t\t%-4d\n", (char *) fiesta->key,
-      (char *) val->nombre, q_date_to_string (&(val->fecha)), val->precio);
+  printf (PATAN_CONSOLE_STR_FORMAT PATAN_CONSOLE_STR_FORMAT \
+      PATAN_CONSOLE_STR_FORMAT PATAN_CONSOLE_INT_FORMAT "\n",
+      fiesta->key, val->nombre, q_date_to_string (&(val->fecha)), val->precio);
 }
 
 /* Compare Functions */
@@ -64,8 +66,8 @@ patan_fiestas_cmp_by_fecha (QHashKeyValue * kv1,
 void
 patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
 {
-  patan_print_header ("ID", "NOMBRE", "FECHA", "PRECIO (S/.)",
-      NULL);
+  patan_print_header ("ID", PATAN_CONSOLE_STR, "NOMBRE", PATAN_CONSOLE_STR,
+      "FECHA", PATAN_CONSOLE_STR, "PRECIO (S/.)", PATAN_CONSOLE_INT, NULL);
 
   switch (sort_by) {
     case PATAN_SORT_BY_ID:
@@ -83,6 +85,16 @@ patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
   q_slist_foreach (fiestas_list, patan_fiesta_value_print, NULL);
 }
 
+void
+patan_fiesta_print_registro_interes (QHashKeyValue * fiesta_kv,
+    PatanSortBy sort_by)
+{
+  QQueue *registro_interes;
+
+  registro_interes = FIESTA_VALUE (fiesta_kv->value)->registro_interes;
+  q_list_foreach (registro_interes->head, patan_alumno_value_print, NULL);
+}
+
 QHashTable *
 patan_fiestas_new ()
 {
@@ -98,6 +110,22 @@ patan_fiestas_insert (QHashTable * hash_table, const char * id,
       fiesta_value_new (strdup (nombre), precio, date));
 }
 
+int
+patan_fiesta_eq_nombre (QHashKeyValue * fiesta_kv, char * nombre_fiesta)
+{
+  FiestaValue *fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+  return strcmp (fiesta_val->nombre, nombre_fiesta) == 0;
+}
+
+void
+patan_fiesta_registrar_interes (QHashKeyValue * fiesta_kv,
+    QHashKeyValue * alumno_kv)
+{
+  AlumnoValue *alumno_val = ALUMNO_VALUE (alumno_kv->value);
+  FiestaValue *fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+
+  q_queue_push_head (fiesta_val->registro_interes, alumno_kv);
+}
 
 /* Parsear archivo de fiestas */
 
@@ -144,7 +172,7 @@ patan_parse_fiestas (const char * filename)
       something[i] = c;
       i++;
     }
-    something[i] = '\0';
+    something[i - 1] = '\0';
     nombre = strdup (something);
 
     i = 0;

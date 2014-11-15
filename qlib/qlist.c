@@ -80,6 +80,24 @@ q_list_find_compare (QList * list, qpointer data, QEqualFunc func)
 }
 
 /**
+ * q_slist_foreach:
+ *
+ * Call a function for each element of the list.
+ *
+ **/
+
+void
+q_list_foreach (QList * list, QFunc func, qpointer user_data)
+{
+  QList *l;
+  l = list;
+  while (l) {
+    func (l->data, user_data);
+    l = l->next;
+  }
+}
+
+/**
  * q_list_free:
  *
  * Free a list and free each data element.

@@ -44,10 +44,9 @@ QSList*
 q_slist_find_compare (QSList * list, qpointer data, QEqualFunc func)
 {
   QSList *l;
-  for (l = list; l != NULL; l = l->next) {
-    if (func(l->data, data))
+  for (l = list; l != NULL; l = l->next)
+    if (func (l->data, data))
       break;
-  }
   return l;
 }
 

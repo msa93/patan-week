@@ -89,3 +89,17 @@ q_hash_table_get_key_values (QHashTable * hash_table)
   return l;
 }
 
+QHashKeyValue * 
+q_hash_table_get_key_value_by_data (QHashTable * hash_table, qpointer data,
+    QEqualFunc func)
+{
+  int i;
+  for (i = 0; i < hash_table->size; i++) {
+    QSList *l;
+    l = q_slist_find_compare (hash_table->table[i], data, func);
+    if (l)
+      return Q_HASH_KEY_VALUE (l->data);
+  }
+  return NULL;
+}
+
