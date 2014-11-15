@@ -30,7 +30,7 @@ patan_alumno_value_print (qpointer data, qpointer user_data)
   alumno = Q_HASH_KEY_VALUE (data);
   val = ALUMNO_VALUE (alumno->value);
 
-  printf ("%s\t\t%s\t\t%d/%d/%d\t\t%s\n", (char *) alumno->key,
+  printf ("%s\t\t%s\t\t%02d/%02d/%d\t\t%s\n", (char *) alumno->key,
       (char *) val->nombre, val->fecha_nacimiento.day,
       val->fecha_nacimiento.month, val->fecha_nacimiento.year,
       val->especialidad ? val->especialidad->value : NULL);
