@@ -62,6 +62,13 @@ patan_especialidades_print (QSList * especialidades_list, PatanSortBy sort_by)
   q_slist_foreach (especialidades_list, patan_especialidad_value_print, NULL);
 }
 
+/* Compare Functions */
+int
+patan_especialidad_eq_nombre (QHashKeyValue * especialidad_kv, char * nombre)
+{
+  return strcmp (especialidad_kv->value, nombre) == 0;
+}
+
 /* Leer especialidades desde un archivo */
 
 QHashTable *

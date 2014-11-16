@@ -31,5 +31,7 @@ void            patan_alumnos_insert      (QHashTable * hash_table,
 QHashTable*     patan_parse_alumnos       (const char * filename,
                                           QHashTable * especialidades);
 void            patan_alumno_value_print  (qpointer data, qpointer user_data);
+int             patan_alumno_eq_nombre    (QHashKeyValue * alumno_kv,
+                                          char * nombre);
 
 #endif

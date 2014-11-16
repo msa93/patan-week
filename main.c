@@ -129,12 +129,45 @@ patan_console_menu (PatanEspecialidades * especialidades,
       scanf ("%s", id);
       printf ("especialidad: ");
       scanf ("% [^\n]s", especialidad);
-      gets (especialidad);
+      /* gets (especialidad); */
       patan_especialidades_insert (especialidades, id, especialidad);
       break;
     }
     case PATAN_OPT_REGISTRAR_ALUMNO:
+    {
+      char id[9];
+      char nombre[500];
+      char especialidad[500];
+      char fecha_nacimiento[9];
+      QDate date;
+      QHashKeyValue *especialidad_kv;
+
+      printf ("Ingrese codigo de alumno: ");
+      scanf ("%s", id);
+
+      /*TODO: validar que sea solo digitos y de maximo 8 digitos */
+
+      printf ("Ingrese nombre de alumno: ");
+      scanf ("% [^\n]s", nombre);
+
+      printf ("Ingrese nombre de especialidad: ");
+      scanf ("% [^\n]s", especialidad);
+
+      especialidad_kv = q_hash_table_get_key_value_by_data (especialidades,
+          especialidad, patan_alumno_eq_nombre);
+
+      /* Validar existencia de especialidad */
+      if (!especialidad_kv) {
+        printf ("Especialidad no registrada");
+        break;
+      }
+
+      printf ("Ingrese fecha de nacimiento (dd mm yyyy): ");
+      scanf ("%d %d %d", &(date.day), &(date.month), &(date.year));
+      patan_alumnos_insert (alumnos, id, nombre, &date, especialidad);
+      
       break;
+    }
     case PATAN_OPT_REGISTRAR_FIESTA:
       break;
     case PATAN_OPT_REGISTRAR_INTERES:
@@ -149,7 +182,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
       fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
           patan_fiesta_eq_nombre);
       if (fiesta_kv) {
-        printf ("Ingrese código de alumno: \n");
+        printf ("Ingrese código de alumno: ");
         scanf ("%s", codigo);
         alumno_kv = q_hash_table_get_key_value_by_key (alumnos, codigo);
         if (alumno_kv) {

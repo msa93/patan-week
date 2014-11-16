@@ -16,12 +16,15 @@ void        patan_especialidad_value_print (qpointer data,
                                             qpointer user_data);
 
 void        patan_especialidades_print (QSList * especialidades_list,
-          PatanSortBy sort_by);
+                                        PatanSortBy sort_by);
 
 QHashTable* patan_especialidades_new (void);
 
 void        patan_especialidades_insert (QHashTable * hash_table,
                                          const char * id,
                                          const char * especialidad);
+
+int         patan_especialidad_eq_nombre (QHashKeyValue * especialidad_kv,
+                                          char * nombre);
 
 #endif

@@ -17,6 +17,11 @@
 
 #define qalloc(type, n)        ((type *) malloc (n * sizeof (type)))
 
-
+#ifdef DEBUG
+  #define Q_DEBUG(fmt, args...) \
+      printf("%s:%d-> " fmt "\n", __FILE__, __LINE__, args)
+#else
+  #define Q_DEBUG(fmt, args...)
+#endif
 
 #endif /* __Q_LIB_H__ */

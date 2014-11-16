@@ -11,7 +11,6 @@ alumno_value_new (const char * nombre, QDate *fecha_nacimiento,
 
   alumno_value = malloc (sizeof (AlumnoValue));
   alumno_value->nombre = strdup (nombre);
-  printf ("%s\n", alumno_value->nombre);
   alumno_value->fecha_nacimiento.day = fecha_nacimiento->day;
   alumno_value->fecha_nacimiento.month = fecha_nacimiento->month;
   alumno_value->fecha_nacimiento.year = fecha_nacimiento->year;
@@ -35,6 +34,15 @@ patan_alumno_value_print (qpointer data, qpointer user_data)
       alumno->key, val->nombre,
       q_date_to_string (&(val->fecha_nacimiento)),
       val->especialidad ? val->especialidad->value : NULL);
+}
+
+/* Equal Funcions */
+
+int
+patan_alumno_eq_nombre (QHashKeyValue * alumno_kv, char * nombre)
+{
+  AlumnoValue *alumno_val = ALUMNO_VALUE (alumno_kv->value);
+  return strcmp (alumno_val->nombre, nombre) == 0;
 }
 
 /* Compare Functions */
@@ -156,6 +164,7 @@ patan_parse_alumnos (const char * filename, QHashTable *especialidades) {
       break;
     something[i] = '\0';
     id_alumno = strdup (something);
+    Q_DEBUG ("ID Alumno: %s", something);
 
     i = 0;
     while ((c = fgetc (f)) && (isalpha (c) || (c == ' '))) {
@@ -164,6 +173,7 @@ patan_parse_alumnos (const char * filename, QHashTable *especialidades) {
     }
     something[i] = '\0';
     nombre = strdup (something);
+    Q_DEBUG ("Nombre Alumno: %s", something);
 
     i = 0;
     something[i] = c;
@@ -174,6 +184,7 @@ patan_parse_alumnos (const char * filename, QHashTable *especialidades) {
     }
     something[i] = '\0';
     id_especialidad = strdup (something);
+    Q_DEBUG ("Especialidad de alumno: %s", something);
 
     i = 0;
     while ((c = fgetc (f)) && isdigit (c)) {
@@ -198,6 +209,13 @@ patan_parse_alumnos (const char * filename, QHashTable *especialidades) {
     }
     something[i] = '\0';
     date.year = atoi (something);
+
+    /* Kill me: this is fucking ugly. Parse correctly in Windows files */
+    if (c == 13)
+      c = fgetc (f);
+
+    Q_DEBUG ("Alumno Fecha Nacimiento: %s", q_date_to_string (&date));
+    Q_DEBUG ("Salto de linea: %d", c);
 
 
     q_hash_table_insert (hash_table, strdup (id_alumno),
