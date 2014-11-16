@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include "especialidades.h"
 
+
+/* TODO Liberar tabla hash de especialidades
+
+void
+patan_especialidades_free (PatanEspecialidades * alumnos)
+
+*/
+
 QHashTable *
 patan_especialidades_new ()
 {

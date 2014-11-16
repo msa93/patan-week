@@ -4,20 +4,10 @@
 
 #include "patan.h"
 
-
-
-/*******************************************************/
-
-
-/**********************************************************/
-
-
-
-/*****************************************************************************/
-
 /* TODO:
  * This is a generic way to parse. It is missing to output what has been parsed.
- * We are keeping it simple below.
+ * For the while, we are keeping it simple.
+ * I hate parsing.
 */
 
 /*
@@ -176,20 +166,6 @@ patan_parse_asistencia (const char * filename, QHashTable *fiestas,
 }
 
 
-/***************************************************************************/
-
-
-
-
-/* ALUMNOS */
-
-
-
-/* FIESTAS (Oscar) */
-
-
-
-/* Utilidades */
 void
 patan_registrar_asistencia (QHashKeyValue * alumno_kv,
     QHashKeyValue * fiesta_kv)
@@ -202,8 +178,4 @@ patan_registrar_asistencia (QHashKeyValue * alumno_kv,
     fiesta_val->alumnos = q_slist_prepend (fiesta_val->alumnos, alumno_kv);
     alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
 }
-
-/*********************************************/
-
-
 

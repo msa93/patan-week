@@ -60,6 +60,13 @@ patan_console_ask_for_files (PatanEspecialidades ** especialidades,
   printf ("Ingrese archivo de fiestas: ");
   scanf ("%s", filename);
   *fiestas = patan_parse_fiestas (filename);
+
+  /* TODO
+   * -Pedir archivo de asistencias, para ello habra que crear una funcion para
+   *  parsear archivo de especialidades.
+   * -Recordar que no hay una estructura/tipo PatanAsistencias. Las asistencias,
+   *  son un 'campo' de la estructura 'PatanFiestaValue'
+   */
 }
 
 static void
@@ -169,6 +176,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
       break;
     }
     case PATAN_OPT_REGISTRAR_FIESTA:
+      /* TODO Registrar fiesta ignorando asistencias o registro de interes*/
       break;
     case PATAN_OPT_REGISTRAR_INTERES:
     {
@@ -193,10 +201,18 @@ patan_console_menu (PatanEspecialidades * especialidades,
         printf ("Nombre de fiesta no registrado.\n");      
       break;
     }
-      break;
     case PATAN_OPT_REGISTRAR_CAPACIDAD_FIESTA:
+      /* TODO Actualizar el valor de la capacidad de la fiesta*/
       break;
     case PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES:
+      /* TODO
+       * Mover alumnos de la cola de registro de interes a la lista de
+       * asistencias.
+       * IMPORTANTE! Cuando se agrega un alumno a la lista de fiestas asistidas,
+       * tambien se agrega la fiesta a la lista de fiestas asistidas del
+       * alumno. Para ello usar la funcion:
+       * patan/patan.c:patan_registrar_asistencia
+       */
       break;
     case PATAN_OPT_MOSTRAR_ESPECIALIDADES:
     {
@@ -284,6 +300,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
           patan_fiestas_print (fiestas_list, PATAN_SORT_BY_FECHA);
           break;
         default:
+          /* Este es un truco para retroceder en el menu */
           opt = PATAN_OPT_BACK;
           break;
       }
@@ -304,11 +321,34 @@ patan_console_menu (PatanEspecialidades * especialidades,
         printf ("Nombre de fiesta no registrado.\n");      
       break;
     }
-    case PATAN_OPT_MOSTRAR_FIESTA_ASISTENTES: 
+    case PATAN_OPT_MOSTRAR_FIESTA_ASISTENTES:
+      /* TODO
+       * 1. Pedir al usuario que escriba el nombre de la fiesta.
+       * 1.1 SI el nombre no es valido, entonces salir del menu.
+       * 2. Se muestra la lista de los asistentes a la fiesta.
+       *
+       * Para salir del menu se puede usar el truco de PATAN_OPT_BACK,
+       * ver arriba.
+       */
       break;
     case PATAN_OPT_MOSTRAR_ALUMNO_FIESTAS_ASISTIDAS:
+      /* TODO
+       * 1. Pedir al usuario que escriba el codigo del alumno.
+       * 1.1 SI el codigo no es valido, entonces salir del menu.
+       * 2. Se muestra la lista de las fiestas a las que asisitio el alumno.
+       *
+       * Para salir del menu se puede usar el truco de PATAN_OPT_BACK,
+       * ver arriba.
+       */
       break;
     case PATAN_OPT_EXIT:
+      /* TODO 
+       * Preguntar al usuario antes de salir si desea guardar todo lo que ha
+       * modificado a los archivos respectivos de asistencias, fiestas
+       * y especialidades. Esto implica tomar los elementos de la tabla hash
+       * y colocarlos en los archivos respetando el formato actual para
+       * especialidades, asistencias, fiestas y alumnos.
+       */
       ret = FALSE;
       break;
     default:
@@ -334,59 +374,7 @@ main (int argc, char ** argv)
 
   patan_console_ask_for_files (&especialidades, &alumnos, &fiestas);
 
-  patan_console_loop (especialidades, alumnos, fiestas);
-
-/*
-  QDate d1, d2, d3, d4;
-  QDate d5, d6, d7; 
-
-  //PatanFiestas *fiestas;
-
-  QSList *especialidades_list;
-  QSList *alumnos_list;
-  QSList *fiestas_list;
-
-  patan_init (&especialidades, &alumnos, &fiestas);
-  //especialidades = patan_parse_especialidades ("especialidad.txt");
-
-  patan_especialidades_insert (especialidades, "005", "Artes Escenicas");
-  patan_especialidades_insert (especialidades, "003", "Ingenieria Mecanica");
-  patan_especialidades_insert (especialidades, "001", "Ingenieria Informatica");
-  patan_especialidades_insert (especialidades, "002", "Ingenieria de Minas");
-  patan_especialidades_insert (especialidades, "004", "Matematica");
-  patan_especialidades_insert (especialidades, "006", "Derecho");
-
-
-  d1 = q_date_new (1, 17, 1994);
-  d2 = q_date_new (3, 19, 1995);
-  d3 = q_date_new (5, 5, 1992);
-  d4 = q_date_new (4, 8, 1992);
-  
-  patan_alumnos_insert (alumnos, "20105515", "Fabian Orccon", &d1, NULL);
-  patan_alumnos_insert (alumnos, "20128060", "Alberto Suarez", &d2, NULL);
-  patan_alumnos_insert (alumnos, "20115365", "Jorge Rodriguez", &d3, NULL);
-  patan_alumnos_insert (alumnos, "20125666", "Felipe Kross", &d4, NULL);
-
-  d5 = q_date_new (1, 15, 2014);
-  d6 = q_date_new (7, 9, 2013);
-  d7 = q_date_new (5, 30, 2014);
-
-  patan_fiestas_insert (fiestas, "2", "Minerva", 30, &d5);
-  patan_fiestas_insert (fiestas, "1", "Cachimbos Locos 2013", 60, &d6);
-  patan_fiestas_insert (fiestas, "3", "Fiesta de Finales", 90, &d7);
-
-  especialidades_list = q_hash_table_get_key_values (especialidades);
-  patan_especialidades_print (especialidades_list, PATAN_SORT_BY_ESPECIALIDAD);
-
-  alumnos_list = q_hash_table_get_key_values (alumnos);
-  patan_alumnos_print (alumnos_list, PATAN_SORT_BY_NOMBRE);
-
-  fiestas_list = q_hash_table_get_key_values (fiestas);
-  patan_fiestas_print (fiestas_list, PATAN_SORT_BY_ID);
-
-*/
-
-  
+  patan_console_loop (especialidades, alumnos, fiestas);  
 
   return 0;
 }

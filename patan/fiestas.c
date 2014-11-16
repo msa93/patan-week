@@ -2,6 +2,22 @@
 #include <stdio.h>
 #include "fiestas.h"
 
+/* TODO Liberar estructura FiestaValue de alumno
+
+void
+patan_fiesta_value_free (PatanFiestas * alumnos)
+
+*/
+
+
+/* TODO Liberar tabla hash de fiestas, reusando patan_fiestas_value_free
+
+void
+patan_fiestas_free (PatanFiestas * alumnos)
+
+*/
+
+
 FiestaValue *
 fiesta_value_new (const char * nombre, int precio, QDate * fecha)
 {
