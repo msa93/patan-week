@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "qlib.h"
 #include "patan.h"
 
@@ -61,12 +62,10 @@ patan_console_ask_for_files (PatanEspecialidades ** especialidades,
   scanf ("%s", filename);
   *fiestas = patan_parse_fiestas (filename);
 
-  /* TODO
-   * -Pedir archivo de asistencias, para ello habra que crear una funcion para
-   *  parsear archivo de especialidades.
-   * -Recordar que no hay una estructura/tipo PatanAsistencias. Las asistencias,
-   *  son un 'campo' de la estructura 'PatanFiestaValue'
-   */
+  printf ("Ingrese archivo de asistencias: ");
+  scanf ("%s", filename);
+  patan_parse_asistencia (filename, *fiestas, *alumnos);
+
 }
 
 static void
@@ -101,7 +100,7 @@ patan_console_show_sort_by_alumnos ()
   printf ("1) Ordenar por id.\n");
   printf ("2) Ordenar por nombre.\n");
   printf ("3) Ordenar por fecha de nacimiento.\n");
-  printf ("4) Ordenar por fecha de especialidad.\n");
+  printf ("4) Ordenar por especialidad.\n");
   printf ("-1) Back.\n");
 }
 
@@ -112,6 +111,16 @@ patan_console_show_sort_by_fiestas ()
   printf ("2) Ordenar por nombre.\n");
   printf ("3) Ordenar por fecha de fiesta.\n");
   printf ("-1) Back.\n");
+}
+
+static int
+validate_id_alumno (char * id)
+{
+  int i, val = 1;
+  for (i=0; i<8; i++)
+    if(!isdigit(id[i]))
+      return 0;   
+  return (8 == strlen(id));
 }
 
 qboolean
@@ -150,8 +159,11 @@ patan_console_menu (PatanEspecialidades * especialidades,
 
       printf ("Codigo de alumno: ");
       scanf ("%s", id);
-
-      /*TODO: validar que sea solo digitos y de maximo 8 digitos */
+      
+      if (!validate_id_alumno (id)) {
+        printf ("Codigo de alumno no valido.\n");
+        break;
+      }
 
       printf ("Nombre de alumno: ");
       scanf (" %[^\n]s", nombre);
@@ -165,7 +177,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
       especialidad_kv =\
           q_hash_table_get_key_value_by_data (Q_HASH_TABLE (especialidades),
               especialidad, patan_especialidad_eq_nombre);
-      Q_DEBUG ("Velidando especialidad_kv (QHashKeyValue)", NULL);
+      Q_DEBUG ("Validando especialidad_kv (QHashKeyValue)", NULL);
 
       /* Validar existencia de especialidad */
       if (!especialidad_kv) {
