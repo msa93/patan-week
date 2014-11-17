@@ -77,7 +77,7 @@ patan_console_show_main_menu ()
   printf (" 3) Registrar fiesta.\n");
   printf (" 4) Registrar interes.\n");
   printf (" 5) Registrar aforo de fiesta.\n");
-  printf (" 6) Registrar registro de interes.\n");
+  printf (" 6) Registrar lista de interes automaticamente (avanzar cola).\n");
   printf (" 7) Mostrar especialidades.\n"); 
   printf (" 8) Mostrar alumnos.\n");
   printf (" 9) Mostrar fiestas.\n");
@@ -247,15 +247,24 @@ patan_console_menu (PatanEspecialidades * especialidades,
       break;
     }
     case PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES:
-      /* TODO
-       * Mover alumnos de la cola de registro de interes a la lista de
-       * asistencias.
-       * IMPORTANTE! Cuando se agrega un alumno a la lista de fiestas asistidas,
-       * tambien se agrega la fiesta a la lista de fiestas asistidas del
-       * alumno. Para ello usar la funcion:
-       * patan/patan.c:patan_registrar_asistencia
-       */
+    {
+      char fiesta[100];
+      QHashKeyValue *fiesta_kv;
+
+      printf ("Nombre de fiesta: ");
+      scanf (" %[^\n]s", fiesta);
+
+      fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
+          patan_fiesta_eq_nombre);
+
+      Q_DEBUG ("Se encontro la fiesta %s. Codigo: %s", fiesta, fiesta_kv->key);
+      if (fiesta_kv)
+        patan_fiesta_avanzar_cola (fiesta_kv);
+      else
+        printf ("Nombre de fiesta no registrado.\n");
+
       break;
+    }
     case PATAN_OPT_MOSTRAR_ESPECIALIDADES:
     {
       PatanSortBy sort_by;

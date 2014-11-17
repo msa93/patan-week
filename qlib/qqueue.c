@@ -46,7 +46,7 @@ q_queue_push_tail (QQueue * queue, qpointer data)
  * it returns NULL.
  */
 qpointer
-q_queue_pop_tail (QQueue * queue)
+q_queue_pop_head (QQueue * queue)
 {
   if (queue->head) {
     QList *head = queue->head;

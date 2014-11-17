@@ -17,7 +17,7 @@ struct _QQueue {
 QQueue*         q_queue_new             (void);
 void            q_queue_push_head       (QQueue * queue, qpointer data);
 void            q_queue_push_tail       (QQueue * queue, qpointer data);
-qpointer        q_queue_pop_tail        (QQueue * queue);
+qpointer        q_queue_pop_head        (QQueue * queue);
 QQueue*         q_queue_free            (QQueue * queue);
 
 

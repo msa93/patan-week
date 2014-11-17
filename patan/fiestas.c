@@ -31,6 +31,10 @@ fiesta_value_new (const char * nombre, int precio, QDate * fecha)
   fiesta_value->fecha.year = fecha->year;
   fiesta_value->asistentes = NULL;
   fiesta_value->registro_interes = q_queue_new ();
+  fiesta_value->monto_recaudado = 0;
+
+  fiesta_value->aforo = -1;
+  fiesta_value->cantidad_inscritos = -1;
   return fiesta_value;
 }
 
@@ -99,6 +103,27 @@ patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
       break;
   }
   q_slist_foreach (fiestas_list, patan_fiesta_value_print, NULL);
+}
+
+void
+patan_fiesta_avanzar_cola (QHashKeyValue * fiesta_kv)
+{
+  FiestaValue *fiesta_val;
+  QQueue *registro_interes;
+  QSList *asistentes;
+  int i;
+
+  fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+  registro_interes = fiesta_val->registro_interes;
+  asistentes = fiesta_val->asistentes;
+
+  for (i = 0; i < registro_interes->length || i < fiesta_val->aforo; i++) {
+    QHashKeyValue *alumno_kv;
+    alumno_kv = q_queue_pop_head (registro_interes);
+    patan_registrar_asistencia (alumno_kv, fiesta_kv);
+    asistentes = q_slist_prepend (asistentes, alumno_kv);
+  }
+  fiesta_val->asistentes = asistentes;
 }
 
 void

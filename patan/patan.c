@@ -170,12 +170,18 @@ void
 patan_registrar_asistencia (QHashKeyValue * alumno_kv,
     QHashKeyValue * fiesta_kv)
 {
-    FiestaValue *fiesta_val;
-    AlumnoValue *alumno_val;
-    alumno_val = ALUMNO_VALUE (alumno_kv->value);
-    fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+  FiestaValue *fiesta_val;
+  AlumnoValue *alumno_val;
 
-    fiesta_val->asistentes = q_slist_prepend (fiesta_val->asistentes, alumno_kv);
-    alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
+  alumno_val = ALUMNO_VALUE (alumno_kv->value);
+  fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+
+  if (fiesta_val->cantidad_inscritos == fiesta_val->aforo)
+    return;
+
+  fiesta_val->asistentes = q_slist_prepend (fiesta_val->asistentes, alumno_kv);
+  alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
+
+  fiesta_val->cantidad_inscritos++;
 }
 
