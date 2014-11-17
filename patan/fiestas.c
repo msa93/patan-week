@@ -29,7 +29,7 @@ fiesta_value_new (const char * nombre, int precio, QDate * fecha)
   fiesta_value->fecha.day = fecha->day;
   fiesta_value->fecha.month = fecha->month;
   fiesta_value->fecha.year = fecha->year;
-  fiesta_value->alumnos = NULL;
+  fiesta_value->asistentes = NULL;
   fiesta_value->registro_interes = q_queue_new ();
   return fiesta_value;
 }
@@ -102,11 +102,12 @@ patan_fiestas_print (QSList * fiestas_list, PatanSortBy sort_by)
 }
 
 void
-patan_fiesta_print_registro_interes (QHashKeyValue * fiesta_kv,
-    PatanSortBy sort_by)
+patan_fiesta_print_registro_interes (QHashKeyValue * fiesta_kv)
 {
   QQueue *registro_interes;
 
+  patan_print_header ("ID", PATAN_CONSOLE_STR, "NOMBRE", PATAN_CONSOLE_STR,
+      "FECHA NAC", PATAN_CONSOLE_STR, "ESPECIALIDAD", PATAN_CONSOLE_STR, NULL);
   registro_interes = FIESTA_VALUE (fiesta_kv->value)->registro_interes;
   q_list_foreach (registro_interes->head, patan_alumno_value_print, NULL);
 }

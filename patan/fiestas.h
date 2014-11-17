@@ -17,7 +17,10 @@ struct _FiestaValue {
   QDate fecha;
   QQueue *registro_interes;
   /* List of QHashKeyValue containing a key-value pair of AlumnoValue* */
-  QSList *alumnos;
+  QSList *asistentes;
+  int aforo;
+  int monto_recaudado;
+  int cantidad_inscritos;
 };
 
 QHashTable*     patan_fiestas_new     ();
@@ -34,5 +37,6 @@ void            patan_fiesta_registrar_interes (QHashKeyValue *fiesta_kv,
                                                QHashKeyValue * alumno_kv);
 int             patan_fiesta_eq_nombre (QHashKeyValue * fiesta_kv,
                                        char * nombre_fiesta);
+void            patan_fiesta_print_registro_interes (QHashKeyValue * fiesta_kv);
 
 #endif

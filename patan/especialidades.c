@@ -74,6 +74,7 @@ patan_especialidades_print (QSList * especialidades_list, PatanSortBy sort_by)
 int
 patan_especialidad_eq_nombre (QHashKeyValue * especialidad_kv, char * nombre)
 {
+  Q_DEBUG ("%s==%s: %d", especialidad_kv->value, nombre);
   return strcmp (especialidad_kv->value, nombre) == 0;
 }
 

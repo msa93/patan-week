@@ -8,7 +8,7 @@ typedef enum {
   PATAN_OPT_REGISTRAR_ALUMNO = 2,
   PATAN_OPT_REGISTRAR_FIESTA = 3,
   PATAN_OPT_REGISTRAR_INTERES = 4,
-  PATAN_OPT_REGISTRAR_CAPACIDAD_FIESTA = 5,
+  PATAN_OPT_REGISTRAR_AFORO_FIESTA = 5,
   PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES = 6,
   PATAN_OPT_MOSTRAR_ESPECIALIDADES = 7,
   PATAN_OPT_MOSTRAR_ALUMNOS = 8,
@@ -76,7 +76,7 @@ patan_console_show_main_menu ()
   printf (" 2) Registrar alumno.\n");
   printf (" 3) Registrar fiesta.\n");
   printf (" 4) Registrar interes.\n");
-  printf (" 5) Registrar capacidad de fiesta.\n");
+  printf (" 5) Registrar aforo de fiesta.\n");
   printf (" 6) Registrar registro de interes.\n");
   printf (" 7) Mostrar especialidades.\n"); 
   printf (" 8) Mostrar alumnos.\n");
@@ -135,8 +135,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
       printf ("id: ");
       scanf ("%s", id);
       printf ("especialidad: ");
-      scanf ("% [^\n]s", especialidad);
-      /* gets (especialidad); */
+      scanf (" %[^\n]s", especialidad);
       patan_especialidades_insert (especialidades, id, especialidad);
       break;
     }
@@ -149,48 +148,76 @@ patan_console_menu (PatanEspecialidades * especialidades,
       QDate date;
       QHashKeyValue *especialidad_kv;
 
-      printf ("Ingrese codigo de alumno: ");
+      printf ("Codigo de alumno: ");
       scanf ("%s", id);
 
       /*TODO: validar que sea solo digitos y de maximo 8 digitos */
 
-      printf ("Ingrese nombre de alumno: ");
-      scanf ("% [^\n]s", nombre);
+      printf ("Nombre de alumno: ");
+      scanf (" %[^\n]s", nombre);
+      Q_DEBUG ("Nombre: %s", nombre); 
 
-      printf ("Ingrese nombre de especialidad: ");
-      scanf ("% [^\n]s", especialidad);
+      printf ("Nombre de especialidad: ");
+      scanf (" %[^\n]s", especialidad);
+      Q_DEBUG ("Especialidad: %s", especialidad); 
 
-      especialidad_kv = q_hash_table_get_key_value_by_data (especialidades,
-          especialidad, patan_alumno_eq_nombre);
+      Q_DEBUG ("Obteniendo especialidad_kv (QHashKeyValue)", NULL);
+      especialidad_kv =\
+          q_hash_table_get_key_value_by_data (Q_HASH_TABLE (especialidades),
+              especialidad, patan_especialidad_eq_nombre);
+      Q_DEBUG ("Velidando especialidad_kv (QHashKeyValue)", NULL);
 
       /* Validar existencia de especialidad */
       if (!especialidad_kv) {
-        printf ("Especialidad no registrada");
+        printf ("Especialidad no registrada.");
         break;
       }
 
-      printf ("Ingrese fecha de nacimiento (dd mm yyyy): ");
+      printf ("Fecha de nacimiento (dd mm yyyy): ");
       scanf ("%d %d %d", &(date.day), &(date.month), &(date.year));
-      patan_alumnos_insert (alumnos, id, nombre, &date, especialidad);
+      patan_alumnos_insert (alumnos, id, nombre, &date, especialidad_kv);
       
       break;
     }
     case PATAN_OPT_REGISTRAR_FIESTA:
-      /* TODO Registrar fiesta ignorando asistencias o registro de interes*/
+    {
+      char id[9];
+      char nombre[100];
+      QDate date;
+      int precio;
+
+      printf ("ID de fiesta: ");
+      scanf ("%s", id);
+      Q_DEBUG ("ID de fiesta: %s", id);
+
+      printf ("Nombre de fiesta: ");
+      scanf (" %[^\n]s", nombre);
+      Q_DEBUG ("Nombre de fiesta: %s", nombre);
+
+      printf ("Fecha de nacimiento (dd mm yyyy): ");
+      scanf ("%d %d %d", &(date.day), &(date.month), &(date.year));
+      Q_DEBUG ("Fecha de nacimiento: %s", q_date_to_string (&date));
+
+      printf ("Precio: ");
+      scanf ("%d", precio);
+
+      patan_fiestas_insert (fiestas, id, nombre, precio, &date);
+
       break;
+    }
     case PATAN_OPT_REGISTRAR_INTERES:
     {
       QHashKeyValue *alumno_kv;
       QHashKeyValue *fiesta_kv;
       char codigo[9];
       char fiesta[100];
-      printf ("Ingrese nombre de fiesta: ");
-      scanf ("%s", fiesta);
+      printf ("Nombre de fiesta: ");
+      scanf (" %[^\n]s", fiesta);
 
       fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
           patan_fiesta_eq_nombre);
       if (fiesta_kv) {
-        printf ("Ingrese código de alumno: ");
+        printf ("Código de alumno: ");
         scanf ("%s", codigo);
         alumno_kv = q_hash_table_get_key_value_by_key (alumnos, codigo);
         if (alumno_kv) {
@@ -201,9 +228,24 @@ patan_console_menu (PatanEspecialidades * especialidades,
         printf ("Nombre de fiesta no registrado.\n");      
       break;
     }
-    case PATAN_OPT_REGISTRAR_CAPACIDAD_FIESTA:
-      /* TODO Actualizar el valor de la capacidad de la fiesta*/
+    case PATAN_OPT_REGISTRAR_AFORO_FIESTA:
+    {
+      char fiesta[100];
+      QHashKeyValue *fiesta_kv;
+
+      printf ("Nombre de fiesta: ");
+      scanf (" %[^\n]s", fiesta);
+
+      fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
+          patan_fiesta_eq_nombre);
+
+      if (fiesta_kv) {
+        printf ("Aforo de fiesta: ");
+        scanf ("%d", &(FIESTA_VALUE (fiesta_kv->value)->aforo));
+      } else
+        printf ("Nombre de fiesta no registrado.\n"); 
       break;
+    }
     case PATAN_OPT_REGISTRAR_CERRAR_REGISTRO_INTERES:
       /* TODO
        * Mover alumnos de la cola de registro de interes a la lista de
@@ -316,21 +358,27 @@ patan_console_menu (PatanEspecialidades * especialidades,
       fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
           patan_fiesta_eq_nombre);
       if (fiesta_kv)
-        patan_fiesta_print_registro_interes (fiesta_kv, 0);
+        patan_fiesta_print_registro_interes (fiesta_kv);
       else
         printf ("Nombre de fiesta no registrado.\n");      
       break;
     }
     case PATAN_OPT_MOSTRAR_FIESTA_ASISTENTES:
-      /* TODO
-       * 1. Pedir al usuario que escriba el nombre de la fiesta.
-       * 1.1 SI el nombre no es valido, entonces salir del menu.
-       * 2. Se muestra la lista de los asistentes a la fiesta.
-       *
-       * Para salir del menu se puede usar el truco de PATAN_OPT_BACK,
-       * ver arriba.
-       */
+    {
+      QHashKeyValue *fiesta_kv;
+      char fiesta[100];
+      printf ("Ingrese nombre de fiesta: ");
+      scanf ("%s", fiesta);
+
+      fiesta_kv = q_hash_table_get_key_value_by_data (fiestas, fiesta,
+          patan_fiesta_eq_nombre);
+      if (fiesta_kv)
+        patan_alumnos_print (FIESTA_VALUE (fiesta_kv->value)->asistentes,
+            PATAN_SORT_BY_ID);
+      else
+        printf ("Nombre de fiesta no registrado.\n");
       break;
+    }
     case PATAN_OPT_MOSTRAR_ALUMNO_FIESTAS_ASISTIDAS:
       /* TODO
        * 1. Pedir al usuario que escriba el codigo del alumno.

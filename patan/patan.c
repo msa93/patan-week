@@ -157,7 +157,7 @@ patan_parse_asistencia (const char * filename, QHashTable *fiestas,
     alumno_kv = q_hash_table_get_key_value_by_key (alumnos, id_alumno);
     alumno_val = ALUMNO_VALUE (alumno_kv->value);
 
-    fiesta_val->alumnos = q_slist_prepend (fiesta_val->alumnos, alumno_kv);
+    fiesta_val->asistentes = q_slist_prepend (fiesta_val->asistentes, alumno_kv);
     alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
 
   } while (c != EOF);
@@ -175,7 +175,7 @@ patan_registrar_asistencia (QHashKeyValue * alumno_kv,
     alumno_val = ALUMNO_VALUE (alumno_kv->value);
     fiesta_val = FIESTA_VALUE (fiesta_kv->value);
 
-    fiesta_val->alumnos = q_slist_prepend (fiesta_val->alumnos, alumno_kv);
+    fiesta_val->asistentes = q_slist_prepend (fiesta_val->asistentes, alumno_kv);
     alumno_val->fiestas = q_slist_prepend (alumno_val->fiestas, fiesta_kv);
 }
 
