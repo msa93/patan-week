@@ -446,6 +446,11 @@ patan_console_loop (PatanEspecialidades * especialidades,
   while (patan_console_menu (especialidades, alumnos, fiestas) == TRUE);
 }
 
+void
+patan_free_all ()
+{
+  
+}
 
 int
 main (int argc, char ** argv)
@@ -456,7 +461,9 @@ main (int argc, char ** argv)
 
   patan_console_ask_for_files (&especialidades, &alumnos, &fiestas);
 
-  patan_console_loop (especialidades, alumnos, fiestas);  
+  patan_console_loop (especialidades, alumnos, fiestas);
+
+  patan_free_all (, , );
 
   return 0;
 }
