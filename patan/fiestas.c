@@ -117,7 +117,7 @@ patan_fiesta_avanzar_cola (QHashKeyValue * fiesta_kv)
   registro_interes = fiesta_val->registro_interes;
   asistentes = fiesta_val->asistentes;
 
-  for (i = 0; i < registro_interes->length || i < fiesta_val->aforo; i++) {
+  for (i = 0; i < registro_interes->length && i < fiesta_val->aforo; i++) {
     QHashKeyValue *alumno_kv;
     alumno_kv = q_queue_pop_head (registro_interes);
     patan_registrar_asistencia (alumno_kv, fiesta_kv);

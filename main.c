@@ -389,6 +389,18 @@ patan_console_menu (PatanEspecialidades * especialidades,
       break;
     }
     case PATAN_OPT_MOSTRAR_ALUMNO_FIESTAS_ASISTIDAS:
+    {
+      QHashKeyValue *alumno_kv;
+      char codigo[9];
+      printf ("Codigo de alumno: ");
+      scanf ("%s", codigo);
+
+      alumno_kv = q_hash_table_get_key_value_by_key (alumnos, codigo);
+      if (alumno_kv)
+        patan_fiestas_print (ALUMNO_VALUE (alumno_kv->value)->fiestas,
+            PATAN_SORT_BY_ID);
+      else
+        printf ("Alumno no registrado.\n");
       /* TODO
        * 1. Pedir al usuario que escriba el codigo del alumno.
        * 1.1 SI el codigo no es valido, entonces salir del menu.
@@ -398,6 +410,7 @@ patan_console_menu (PatanEspecialidades * especialidades,
        * ver arriba.
        */
       break;
+    }
     case PATAN_OPT_EXIT:
       /* TODO 
        * Preguntar al usuario antes de salir si desea guardar todo lo que ha
