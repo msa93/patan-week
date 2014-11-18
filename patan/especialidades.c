@@ -2,18 +2,33 @@
 #include <stdio.h>
 #include "especialidades.h"
 
+void
+patan_especialidad_value_free (QHashKeyValue * especialidad_kv,
+    qpointer user_data)
+{
+  free (especialidad_kv->key);
+  free (especialidad_kv->value);
+  free (especialidad_kv);
+}
 
 void
 patan_especialidades_free (PatanEspecialidades * especialidades)
 {
   int i;
+
   Q_DEBUG ("Liberando PatanEspecialidades. %d elementos", especialidades->size);
-  for (i=0; i < especialidades->size ; i++)
+  for (i=0; i < especialidades->size ; i++) {
+    q_slist_foreach (especialidades->table[i], patan_especialidad_value_free,
+        NULL);
     q_slist_free (especialidades->table[i]);
+  }
+
   Q_DEBUG ("Liberando PatanEspecialidades: especialidades->table", NULL);
   free (especialidades->table);
+
   Q_DEBUG ("Liberando PatanEspecialidades: hash_table", NULL);
   free (especialidades);
+
   Q_DEBUG ("PatanEspecialidades liberado.", NULL);
 }
 
