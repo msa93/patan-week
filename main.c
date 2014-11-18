@@ -206,9 +206,9 @@ patan_console_menu (PatanEspecialidades * especialidades,
       scanf (" %[^\n]s", nombre);
       Q_DEBUG ("Nombre de fiesta: %s", nombre);
 
-      printf ("Fecha de nacimiento (dd mm yyyy): ");
+      printf ("Fecha de la fiesta (dd mm yyyy): ");
       scanf ("%d %d %d", &(date.day), &(date.month), &(date.year));
-      Q_DEBUG ("Fecha de nacimiento: %s", q_date_to_string (&date));
+      Q_DEBUG ("Fecha de la fiesta: %s", q_date_to_string (&date));
 
       printf ("Precio: ");
       scanf ("%d", precio);
