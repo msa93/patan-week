@@ -141,7 +141,7 @@ q_slist_foreach (QSList * list, QFunc func, qpointer user_data)
  * Returns: an empty list.
  **/
 
-QSList*
+void
 q_slist_free (QSList * list)
 {
   QSList *l, *cur;
@@ -153,6 +153,5 @@ q_slist_free (QSList * list)
     free (l->data);
     free (cur); 
   }
-  return NULL;
 }
 

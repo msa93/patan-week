@@ -2,21 +2,23 @@
 #include <stdio.h>
 #include "fiestas.h"
 
-/* TODO Liberar estructura FiestaValue de alumno
+void
+patan_fiesta_value_free (FiestaValue * fiesta)
+{
+  q_slist_free (fiesta->asistentes);
+  q_queue_free (fiesta->registro_interes);
+  free(fiesta);
+}
 
 void
-patan_fiesta_value_free (PatanFiestas * alumnos)
-
-*/
-
-
-/* TODO Liberar tabla hash de fiestas, reusando patan_fiestas_value_free
-
-void
-patan_fiestas_free (PatanFiestas * alumnos)
-
-*/
-
+patan_fiestas_free (PatanFiestas * fiestas)
+{
+  int i; 
+  for (i=0; i < fiestas->size ; i++)
+    patan_fiesta_value_free (fiestas->table[i]);
+  free (fiestas->table); 
+  free (fiestas);  
+}
 
 FiestaValue *
 fiesta_value_new (const char * nombre, int precio, QDate * fecha)

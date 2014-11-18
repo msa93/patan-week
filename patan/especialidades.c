@@ -3,12 +3,15 @@
 #include "especialidades.h"
 
 
-/* TODO Liberar tabla hash de especialidades
-
 void
-patan_especialidades_free (PatanEspecialidades * alumnos)
-
-*/
+patan_especialidades_free (PatanEspecialidades * especilidades)
+{
+  int i; 
+  for (i=0; i < especialidades->size ; i++)
+    q_slist_free (especialidades->table[i]);
+  free (especialidades->table);
+  free (especialidades);
+}
 
 QHashTable *
 patan_especialidades_new ()

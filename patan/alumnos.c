@@ -2,24 +2,15 @@
 #include <stdio.h>
 #include "alumnos.h"
 
-
-/* TODO Liberar estructura AlumnoValue de alumno
-
-void
-patan_alumno_value_free (PatanAlumnos * alumnos)
-
-*/
-
-
-/* TODO Liberar tabla hash de alumnos, reusando patan_alumno_value_free
-
 void
 patan_alumnos_free (PatanAlumnos * alumnos)
-
-*/
-
-
-
+{
+  int i;  
+  for (i=0; i < alumnos->size; i++)
+    free(alumnos->table[i]);
+  free (alumnos->table);
+  free (alumnos);
+}
 
 AlumnoValue *
 alumno_value_new (const char * nombre, QDate *fecha_nacimiento,

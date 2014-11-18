@@ -447,9 +447,12 @@ patan_console_loop (PatanEspecialidades * especialidades,
 }
 
 void
-patan_free_all ()
+patan_free_all (PatanEspecialidades *especialidad, PatanAlumnos *alumnos,
+    PatanFiestas *fiestas)
 {
-  
+  patan_especialidades_free (especialidad);  
+  patan_fiestas_free (fiestas);
+  patan_alumnos_free (alumnos);
 }
 
 int
@@ -463,7 +466,7 @@ main (int argc, char ** argv)
 
   patan_console_loop (especialidades, alumnos, fiestas);
 
-  patan_free_all (, , );
+  patan_free_all (&especialidades, &alumnos, &fiestas);
 
   return 0;
 }
