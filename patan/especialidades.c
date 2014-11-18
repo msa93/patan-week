@@ -4,7 +4,7 @@
 
 
 void
-patan_especialidades_free (PatanEspecialidades * especilidades)
+patan_especialidades_free (PatanEspecialidades * especialidades)
 {
   int i; 
   for (i=0; i < especialidades->size ; i++)
