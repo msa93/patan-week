@@ -466,7 +466,7 @@ main (int argc, char ** argv)
 
   patan_console_loop (especialidades, alumnos, fiestas);
 
-  patan_free_all (&especialidades, &alumnos, &fiestas);
+  patan_free_all (especialidades, alumnos, fiestas);
 
   return 0;
 }

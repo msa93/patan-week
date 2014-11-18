@@ -150,7 +150,6 @@ q_slist_free (QSList * list)
   while (l) {
     cur = l;
     l = cur->next;
-    free (l->data);
     free (cur); 
   }
 }

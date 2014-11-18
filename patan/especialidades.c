@@ -6,11 +6,15 @@
 void
 patan_especialidades_free (PatanEspecialidades * especialidades)
 {
-  int i; 
+  int i;
+  Q_DEBUG ("Liberando PatanEspecialidades. %d elementos", especialidades->size);
   for (i=0; i < especialidades->size ; i++)
     q_slist_free (especialidades->table[i]);
+  Q_DEBUG ("Liberando PatanEspecialidades: especialidades->table", NULL);
   free (especialidades->table);
+  Q_DEBUG ("Liberando PatanEspecialidades: hash_table", NULL);
   free (especialidades);
+  Q_DEBUG ("PatanEspecialidades liberado.", NULL);
 }
 
 QHashTable *

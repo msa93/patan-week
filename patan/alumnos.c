@@ -5,11 +5,13 @@
 void
 patan_alumnos_free (PatanAlumnos * alumnos)
 {
-  int i;  
+  int i;
+  Q_DEBUG ("Liberando PatanAlumnos.", NULL);
   for (i=0; i < alumnos->size; i++)
     free(alumnos->table[i]);
   free (alumnos->table);
   free (alumnos);
+  Q_DEBUG ("Liberando PatanAlumnos.", NULL);
 }
 
 AlumnoValue *

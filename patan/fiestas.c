@@ -3,21 +3,35 @@
 #include "fiestas.h"
 
 void
-patan_fiesta_value_free (FiestaValue * fiesta)
+patan_fiesta_value_free (QHashKeyValue * fiesta_kv, qpointer user_data)
 {
-  q_slist_free (fiesta->asistentes);
-  q_queue_free (fiesta->registro_interes);
-  free(fiesta);
+  FiestaValue *fiesta_val;
+
+  fiesta_val = FIESTA_VALUE (fiesta_kv->value);
+
+  Q_DEBUG ("Liberando FiestaValue.", NULL);
+  Q_DEBUG ("Liberando FiestaValue. Liberar lista.", NULL);
+  q_slist_free (fiesta_val->asistentes);
+  Q_DEBUG ("Liberando FiestaValue. Liberar cola.", NULL);
+  q_queue_free (fiesta_val->registro_interes);
+  Q_DEBUG ("Liberando FiestaValue. Liberar estructura.", NULL);
+  free (fiesta_val);
+  free (fiesta_kv);
+  Q_DEBUG ("Liberando FiestaValue.", NULL);
 }
 
 void
 patan_fiestas_free (PatanFiestas * fiestas)
 {
-  int i; 
-  for (i=0; i < fiestas->size ; i++)
-    patan_fiesta_value_free (fiestas->table[i]);
+  int i;
+  Q_DEBUG ("Liberando PatanFiestas.", NULL);
+  for (i=0; i < fiestas->size ; i++) {
+    q_slist_foreach (fiestas->table[i], patan_fiesta_value_free, NULL);
+    q_slist_free (fiestas->table[i]);
+  }
   free (fiestas->table); 
   free (fiestas);  
+  Q_DEBUG ("Liberando PatanFiestas.", NULL);
 }
 
 FiestaValue *
